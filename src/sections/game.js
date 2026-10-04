@@ -1,21 +1,12 @@
 // Section: the "Print Day" game. A short run through one print, one small action per step (see
 // docs/superpowers/specs/2026-10-04-print-day-game-design.md). This module owns the page: header, progress
 // and the stage; each step's screen lives in lib/game/steps/ and is mounted into the stage.
-// Wording and per-object data: src/data/game.js (added in the next task).
+// Wording and per-object data: src/data/game.js.
 import "../styles/game.css";
 import { h } from "../lib/dom.js";
 import { sectionHeader } from "../lib/section.js";
 import { createGame } from "../lib/game/engine.js";
-
-// Play order. `title` is the short name shown in the progress row.
-const STEPS = [
-  { id: "choose", title: "בחירת דגם" },
-  { id: "repair", title: "תיקון הדגם" },
-  { id: "slice", title: "חיתוך לשכבות" },
-  { id: "supports", title: "תמיכות" },
-  { id: "firstLayer", title: "שכבה ראשונה" },
-  { id: "finish", title: "סיום" },
-];
+import { steps as STEPS } from "../data/game.js"; // play order and step names
 
 /** @param {HTMLElement} el the <section id="game"> element */
 export function render(el) {
