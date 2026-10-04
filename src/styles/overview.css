@@ -1,0 +1,25 @@
+/* Overview: a vase drawn in three scroll-driven stages, plus a list of how each technology makes a layer. */
+
+.overview__top {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-8);
+  align-items: center;
+  margin-block: var(--space-6) var(--space-12);
+}
+.overview__figure { max-inline-size: 22rem; inline-size: 100%; margin-inline: auto; }
+.vase { display: block; inline-size: 100%; block-size: auto; overflow: visible; }
+.vase .d-mark { stroke-width: 1.5; }
+.vase .d-move { stroke-width: 1.2; } /* many thin layers: lighter outlines so they stay readable */
+@media (max-width: 820px) {
+  .overview__top { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+}
+
+.overview__how { margin-block-end: var(--space-2); }
+.layer-by { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-2) var(--space-4); align-items: baseline; }
+.layer-by dt { margin: 0; }
+.layer-by dd { margin: 0; }
+@media (max-width: 600px) {
+  .layer-by { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .layer-by dd { margin-block-end: var(--space-2); }
+}

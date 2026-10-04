@@ -1,0 +1,22 @@
+{
+  "name": "3d-print-guide",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hebrew RTL visual guide to 3D printing",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run validate && vite build",
+    "preview": "vite preview",
+    "validate": "node scripts/validate-data.js && node scripts/check-contrast.js",
+    "check:wizard": "node scripts/check-wizard.js"
+  },
+  "dependencies": {
+    "@fontsource-variable/frank-ruhl-libre": "^5.3.0",
+    "@fontsource-variable/heebo": "^5.3.0",
+    "gsap": "^3.15.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.2"
+  }
+}

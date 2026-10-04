@@ -1,0 +1,20 @@
+/* Wizard: stacked questions, answers as the shared selector row, result card below. */
+
+.wizard-q { margin-block-start: var(--space-6); }
+.wizard-q h3 { margin-block-end: var(--space-2); }
+.wizard-q .selector { flex-direction: column; align-items: flex-start; gap: var(--space-1); } /* long answers read better as a list */
+
+.result-host { margin-block-start: var(--space-8); }
+.result { border-block-start: var(--rule) solid var(--border); padding-block-start: var(--space-4); display: grid; gap: var(--space-3); justify-items: start; }
+.result:focus { outline: none; }
+.result h3 { margin: 0; }
+.result p { margin: 0; }
+.result .card { inline-size: 100%; max-inline-size: var(--measure); }
+
+.pair { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem var(--space-2); max-inline-size: none; }
+.pair__material { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
+.pair--big .chip { font-size: 1.6rem; }
+.pair--big .pair__material { font-size: clamp(2rem, 1.2rem + 3.5vw, 3.5rem); line-height: 1.05; font-weight: 900; }
+.pair--big .chip::before { inline-size: 1.05rem; block-size: 1.05rem; }
+
+.result__actions { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }

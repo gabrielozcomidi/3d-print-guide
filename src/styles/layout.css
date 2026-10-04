@@ -1,0 +1,181 @@
+/* Layout and navigation: chapters, side menu (desktop), top bar + index (phones), next-chapter links,
+   home-page starting points. See lib/router.js for how the pieces are built.
+
+   The menu speaks the same language as the rest of the site: display type for titles, outlined
+   circles for numbers (like the process steps), a dashed rule between items (like the tables),
+   hand-drawn arrows, and a wavy underline for "you are here". Spacing follows the 8px grid. */
+
+.layout { display: block; }
+.rail { display: none; }
+.chapter[hidden] { display: none; }
+.chapter:focus { outline: none; }
+
+/* ---------- Open / close buttons: icon + a visible word, so it is clear what they do ---------- */
+.menu-toggle {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--accent);
+  padding: 0.65rem 1.1rem;
+  border: var(--rule) solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+}
+.menu-toggle:hover { color: var(--text); background: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
+.menu-toggle:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+.menu-toggle__icon { display: grid; gap: 6px; inline-size: 1.5rem; flex: none; }
+.menu-toggle__icon span { display: block; block-size: 2.5px; background: var(--accent); border-radius: 2px; }
+.menu-toggle__icon--close { position: relative; block-size: 1.5rem; display: block; }
+.menu-toggle__icon--close span { position: absolute; inset-inline: 0; inset-block-start: calc(50% - 1.25px); }
+.menu-toggle__icon--close span:first-child { transform: rotate(45deg); }
+.menu-toggle__icon--close span:last-child { transform: rotate(-45deg); }
+
+html .rail-open-btn { display: none; }
+
+/* ---------- Table of contents (side rail and phone index) ---------- */
+.toc { list-style: none; margin: 0; padding: 0; }
+.toc__item + .toc__item { border-block-start: 1px dashed var(--border); }
+.toc__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-1); }
+
+.toc__chapter {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-block: 1rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1.15;
+  color: var(--text);
+  text-decoration: none;
+}
+/* numbers are a reading order, so they are shown like the process steps: outlined circle, filled when current */
+.toc__num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border: var(--rule) solid var(--border);
+  border-radius: 50%;
+  font-size: 1.05rem;
+  color: var(--accent);
+}
+.toc__chapter:hover .toc__title { text-decoration: underline wavy var(--accent) 1.5px; text-underline-offset: 0.3em; }
+.toc__chapter[aria-current="true"] { color: var(--accent); }
+.toc__chapter[aria-current="true"] .toc__num { background: var(--accent); color: var(--on-accent); }
+
+/* round arrow button: opens or closes the sections of a chapter without leaving the page */
+.toc__toggle {
+  all: unset;
+  box-sizing: border-box;
+  flex: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border: var(--rule) solid var(--border);
+  border-radius: 50%;
+}
+.toc__toggle:hover { background: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
+.toc__toggle:focus-visible, .toc a:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+.chevron { inline-size: 1.4rem; block-size: 1.4rem; transition: transform 0.2s; }
+.chevron path { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.toc__toggle[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+
+.toc__sections { list-style: none; margin: 0; padding: 0 0 var(--space-2); padding-inline-start: 3.25rem; display: grid; gap: 0.15rem; }
+.toc__sections[hidden] { display: none; }
+.toc__section {
+  display: block;
+  padding-block: 0.45rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  color: var(--text);
+  text-decoration: none;
+}
+.toc__section:hover { text-decoration: underline wavy var(--accent) 1.5px; text-underline-offset: 0.25em; }
+.toc__section[aria-current="true"] { color: var(--accent); text-decoration: underline wavy var(--accent) 2px; text-underline-offset: 0.25em; }
+
+/* ---------- Phone top bar and full-screen index ---------- */
+.site-nav { gap: var(--space-3); }
+.site-nav__btn { padding: 0.5rem 0.95rem; font-size: 1rem; }
+.site-nav__title { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--accent); }
+
+.menu { padding-block: var(--space-3) var(--space-8); }
+.menu .menu__close { align-self: flex-start; margin-block-end: var(--space-3); }
+.menu .toc__chapter { font-size: clamp(1.7rem, 1rem + 3.5vw, 2.4rem); }
+.menu .toc__section { font-size: 1.3rem; }
+
+/* quick links to the sections of the current chapter, right under the top bar (phones only) */
+.chapter-jump {
+  position: sticky;
+  inset-block-start: var(--nav-h);
+  z-index: 20;
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--bg);
+  padding: 0.35rem var(--gutter);
+}
+.chapter-jump a { flex: none; font-family: var(--font-display); font-weight: 800; font-size: 1rem; color: var(--text); text-decoration: none; padding-block: 0.3rem; }
+.chapter-jump a:hover { text-decoration: underline wavy var(--accent) 1.5px; }
+
+/* ---------- End of chapter: where next ---------- */
+.chapter-next { max-inline-size: var(--content-width); margin-inline: auto; padding: var(--space-8) var(--gutter) var(--space-12); }
+.chapter-next__link { display: grid; gap: 0.25rem; justify-items: start; color: inherit; text-decoration: none; border-block-start: var(--rule) solid var(--border); padding-block-start: var(--space-4); }
+.chapter-next__small { font-size: var(--fs-small); }
+.chapter-next__title { font-family: var(--font-display); font-weight: 900; font-size: clamp(2rem, 1rem + 4vw, 4rem); line-height: 1; color: var(--accent); }
+.chapter-next .flow-arrow { inline-size: 4rem; block-size: 1.6rem; margin-block-start: 0.4rem; }
+.chapter-next__link:hover .chapter-next__title { text-decoration: underline wavy var(--accent) 3px; text-underline-offset: 0.12em; }
+.chapter-next__link:focus-visible { outline: 3px solid var(--text); outline-offset: 6px; }
+
+/* ---------- Home page: where to start ---------- */
+.paths { margin-block-start: var(--space-12); max-inline-size: 46rem; }
+.paths__title { font-size: clamp(1.8rem, 1.2rem + 2.5vw, 2.75rem); margin-block-end: var(--space-2); }
+.paths ul { list-style: none; margin: 0; padding: 0; }
+.paths__link { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font-family: var(--font-display); font-weight: 800; font-size: clamp(1.25rem, 1rem + 1.4vw, 1.9rem); line-height: 1.2; color: var(--text); text-decoration: none; padding-block: 0.8rem; border-block-start: var(--rule) solid var(--border); }
+.paths li:last-child .paths__link { border-block-end: var(--rule) solid var(--border); }
+.paths__link:hover span { text-decoration: underline wavy var(--accent) 2px; text-underline-offset: 0.25em; }
+.paths__link .flow-arrow { flex: none; inline-size: 2.75rem; }
+.paths__link:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+
+/* ---------- Desktop: side menu replaces the top bar (and can be closed) ---------- */
+@media (min-width: 56rem) {
+  :root { --nav-h: 0.5rem; --rail-w: 20rem; }
+  .site-nav, .chapter-jump { display: none; }
+  .layout { display: grid; grid-template-columns: var(--rail-w) minmax(0, 1fr); align-items: start; transition: grid-template-columns 0.25s ease; }
+  .rail {
+    display: block;
+    position: sticky;
+    inset-block-start: 0;
+    block-size: 100vh;
+    overflow-y: auto;
+    padding: var(--space-4) var(--space-3) var(--space-8);
+    border-inline-end: var(--rule) solid var(--border);
+  }
+  .rail__head { display: grid; justify-items: start; gap: var(--space-3); margin-block-end: var(--space-4); }
+  .rail__title { font-family: var(--font-display); font-weight: 900; font-size: 1.7rem; line-height: 1.1; color: var(--accent); text-decoration: none; }
+  .rail__title:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+
+  /* closed: the column shrinks to nothing and a labelled button floats in the corner */
+  html.rail-closed .layout { grid-template-columns: 0 minmax(0, 1fr); }
+  html.rail-closed .rail { visibility: hidden; overflow: hidden; padding-inline: 0; border-inline-end-width: 0; }
+  html.rail-closed .rail-open-btn { display: inline-flex; position: fixed; inset-block-start: var(--space-2); inset-inline-start: var(--space-2); z-index: 45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layout, .chevron { transition: none; }
+}

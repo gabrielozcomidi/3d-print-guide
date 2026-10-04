@@ -1,0 +1,33 @@
+/* Use cases: a row per recommendation, technology -> materials, with the reason under it. */
+
+.usecase-tabs { margin-block: var(--space-4) var(--space-6); }
+.usecase h3 { margin-block-end: var(--space-1); }
+
+.recos { margin-block-end: var(--space-6); }
+.reco {
+  display: grid;
+  grid-template-columns: minmax(9rem, 12rem) 2.75rem minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--space-2);
+  padding-block: var(--space-2);
+  border-block-start: var(--rule) solid var(--border);
+}
+.reco:last-child { border-block-end: var(--rule) solid var(--border); }
+.reco__tech { justify-self: start; }
+.reco__materials { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: var(--accent); }
+.reco__why { grid-column: 1 / -1; margin: 0.25rem 0 0; }
+
+/* hand-drawn connector. Drawn pointing right, so in RTL it is mirrored to point toward the materials */
+.flow-arrow { inline-size: 2.75rem; block-size: 1.25rem; filter: url(#wobble); }
+.flow-arrow path { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+[dir="rtl"] .flow-arrow { transform: scaleX(-1); }
+
+.avoid { max-inline-size: var(--measure); }
+.avoid .list li::before { color: var(--accent); }
+
+/* phones: technology and arrow on the first line, materials and the reason underneath at full width
+   (English material names cannot break, so a narrow third column would overflow) */
+@media (max-width: 600px) {
+  .reco { grid-template-columns: minmax(0, 1fr) 2.75rem; row-gap: 0.4rem; }
+  .reco__materials { grid-column: 1 / -1; }
+}

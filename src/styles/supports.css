@@ -1,0 +1,28 @@
+/* Supports section: group/type pickers, demo with mode switch, info cards, settings lists. */
+
+.group-pick { margin-block: var(--space-4) var(--space-2); }
+.type-pick { margin-block: var(--space-2) var(--space-4); }
+.mode-pick { margin-block-start: var(--space-2); }
+.mode-pick .selector__item, .group-pick .selector__item { font-size: 1.05rem; }
+
+.support-stage { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--space-8); align-items: start; margin-block-start: var(--space-3); }
+.support-demo { max-inline-size: 26rem; }
+.support-info__name { font-size: clamp(2rem, 1.2rem + 3vw, 3.25rem); font-weight: 900; line-height: 1; margin-block-end: var(--space-2); overflow-wrap: anywhere; }
+.support-info .tech-panel__lead { margin-block-end: var(--space-3); }
+.support-info .specs { margin-block-end: var(--space-3); }
+
+.support-extras { margin-block-start: var(--space-8); display: grid; gap: var(--space-2); }
+.support-extras h3 { margin-block: var(--space-4) 0; }
+.support-extras .list { max-inline-size: var(--measure); }
+
+@media (max-width: 820px) {
+  .support-stage { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+}
+
+/* "what slicers call it": slicer on one side, its name for this thing on the other (both left-to-right) */
+.callsit { margin-block: var(--space-2); }
+.callsit h4 { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-small); margin: 0 0 0.3rem; }
+.callsit dl { margin: 0; display: grid; gap: 0.2rem; }
+.callsit dl > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: var(--space-2); font-size: var(--fs-small); }
+.callsit dt { font-family: var(--font-display); font-weight: 800; color: var(--accent); text-align: start; }
+.callsit dd { margin: 0; }

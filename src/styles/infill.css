@@ -1,0 +1,27 @@
+/* Infill section: pattern tabs, one-layer demo with density slider, guide bars. */
+
+.infill-stage { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--space-8); align-items: start; margin-block-start: var(--space-3); }
+.infill-demo { max-inline-size: 26rem; }
+.layer-pick { margin-block-start: var(--space-2); }
+.layer-pick .selector__item { font-size: 1.05rem; }
+
+/* density slider: a plain line with a round handle, in the site's ink */
+.density { margin-block-start: var(--space-2); }
+.density label { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-display); font-weight: 800; }
+.density input[type="range"] { flex: 1; accent-color: var(--accent); block-size: 1.5rem; cursor: pointer; }
+.density input[type="range"]:disabled { opacity: 0.4; cursor: not-allowed; }
+.density input[type="range"]:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+.density__value { min-inline-size: 3.2rem; text-align: end; color: var(--accent); }
+
+.infill-guide { margin-block-start: var(--space-8); max-inline-size: 46rem; }
+.guide-row { display: grid; gap: 0.3rem; padding-block: var(--space-2); border-block-start: var(--rule) solid var(--border); --c: var(--accent); }
+.guide-row__text { display: flex; justify-content: space-between; gap: var(--space-2); font-family: var(--font-display); font-weight: 800; }
+.guide-row__text span { color: var(--accent); }
+.guide-row p { margin: 0; }
+
+.infill-extras { margin-block-start: var(--space-8); max-inline-size: var(--measure); }
+.infill-extras h3 { margin-block-start: var(--space-4); }
+
+@media (max-width: 820px) {
+  .infill-stage { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+}

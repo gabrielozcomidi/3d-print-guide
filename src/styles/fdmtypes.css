@@ -1,0 +1,16 @@
+/* FDM printer types: reuses the technologies panel styles (.tech-panel, .diagram, .specs, .list,
+   .mat-table). Only what is specific to this section lives here. */
+
+.diagram__caption { font-size: var(--fs-small); margin: var(--space-1) 0 0; text-align: center; max-inline-size: none; }
+
+/* "what moves" as a definition list: part on one line, what it does under it */
+.moves { margin: 0 0 var(--space-3); display: grid; gap: var(--space-2); }
+.moves dt { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
+.moves dd { margin: 0; }
+.moves > div { display: grid; }
+
+.fdm-types-table { margin-block-start: var(--space-12); }
+
+/* switch between the top view and the Z-axis view above the drawing */
+.view-switch { margin-block-end: var(--space-2); gap: var(--space-1) var(--space-3); }
+.view-switch .selector__item { font-size: 1rem; }

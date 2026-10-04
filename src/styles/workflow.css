@@ -1,0 +1,47 @@
+/* "From model to print": family switch, stage tabs, one stage panel, tool tags, G-code and format lists. */
+
+.family-pick { margin-block: var(--space-4) var(--space-2); }
+.family-pick .selector__item { font-size: 1.05rem; }
+.stage-tabs { margin-block: var(--space-2) var(--space-4); }
+.stage-tabs .selector__item { font-size: 1.1rem; }
+
+.stage { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: var(--space-8); align-items: start; }
+.stage__art { max-inline-size: 22rem; inline-size: 100%; margin-inline: auto; }
+.workflow-art { display: block; inline-size: 100%; block-size: auto; overflow: visible; filter: url(#wobble); }
+.stage__text { display: grid; gap: var(--space-3); align-content: start; }
+.stage__text > * { margin: 0; }
+.stage__text h3 { font-size: clamp(1.8rem, 1.2rem + 2.5vw, 2.75rem); font-weight: 900; line-height: 1.05; }
+@media (max-width: 820px) {
+  .stage { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+}
+
+/* tool names: plain words in display type, spaced (no punctuation, so RTL cannot scramble them) */
+.toolgroup h4 { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-small); margin: 0 0 0.35rem; }
+.tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.3rem var(--space-3); }
+.tags li { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
+
+/* G-code sample: code is always left-to-right; each line has its meaning next to it */
+.gcode, .formats { margin: 0; display: grid; gap: var(--space-1); }
+.gcode > div, .formats > div { display: grid; grid-template-columns: minmax(8rem, 13rem) minmax(0, 1fr); gap: var(--space-2); align-items: baseline; padding-block: 0.35rem; border-block-start: 1px dashed var(--border); }
+.gcode dt { font-family: ui-monospace, Consolas, "Courier New", monospace; font-size: 0.95rem; font-weight: 600; text-align: left; }
+.gcode dd, .formats dd { margin: 0; }
+.formats dt { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
+@media (max-width: 600px) {
+  .gcode > div, .formats > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}
+
+/* ---------- Slicers ---------- */
+.slicers { margin-block-start: var(--space-12); }
+.slicers__title { font-size: clamp(1.8rem, 1.2rem + 2.5vw, 2.75rem); font-weight: 900; line-height: 1.05; margin-block-end: var(--space-2); }
+.slicers .family-pick { margin-block: var(--space-3); }
+.slicers-host > * + * { margin-block-start: var(--space-4); }
+
+.lineage__row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2); }
+.lineage__name { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; }
+
+.slicer-table table { min-inline-size: 48rem; }
+
+.slicer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: var(--space-4) var(--space-6); }
+.slicer { display: grid; gap: var(--space-1); align-content: start; }
+.slicer__name { font-size: 1.6rem; font-weight: 900; margin: 0; }
+.slicer p { margin: 0; }

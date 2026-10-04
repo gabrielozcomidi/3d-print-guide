@@ -1,0 +1,161 @@
+/* Base styles: reset, typography, layout, top bar + menu, shared components.
+   RTL rule: only CSS *logical* properties (inline-start/end, block-start/end).
+   "inline-start" = right side in Hebrew, so nothing here needs to change if direction flips.
+
+   Look: one-colour print. Red ink on blush paper, hand-drawn line art, justified serif body,
+   wide heavy display type. Structure comes from whitespace and a few rules, not boxes. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-block-start: calc(var(--nav-h) + 1rem); /* anchor jumps stop below the top bar */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.75;           /* serif text wants more leading than sans */
+  text-align: start;
+  font-weight: 450;
+}
+
+/* Display type: headings. Heavy, tight, bright ink, so type itself is the graphic. */
+h1, h2, h3 { font-family: var(--font-display); color: var(--accent); margin: 0 0 var(--space-3); }
+h1 { font-size: var(--fs-h1); font-weight: 900; line-height: 0.95; letter-spacing: -0.01em; }
+h2 { font-size: var(--fs-h2); font-weight: 900; line-height: 1; letter-spacing: -0.01em; }
+h3 { font-size: var(--fs-h3); font-weight: 800; line-height: 1.2; }
+
+/* Running text: justified like a printed page, capped at a comfortable measure. */
+p { margin: 0 0 var(--space-2); max-inline-size: var(--measure); text-align: justify; text-wrap: pretty; }
+
+a { color: inherit; text-decoration: underline wavy var(--accent) 1.5px; text-underline-offset: 0.3em; }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--text);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* <bdi> isolates embedded English terms (PLA, SLA) so they don't scramble
+   neighbouring Hebrew punctuation. Nothing to style; here for documentation. */
+bdi { unicode-bidi: isolate; }
+.nw { white-space: nowrap; }
+bdi.nw { white-space: nowrap; }
+h1 bdi.nw, h2 bdi.nw, h3 bdi.nw { white-space: normal; } /* big headings: even a short English name may wrap rather than overflow */ /* a short English term never breaks across lines (added by bidi() for runs up to 16 characters) */
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: var(--space-2);
+  inset-block-start: -4rem;
+  background: var(--text);
+  color: var(--on-accent);
+  padding: var(--space-1) var(--space-2);
+  z-index: 100;
+}
+.skip-link:focus { inset-block-start: var(--space-1); }
+
+/* ---------- Layout ---------- */
+.section {
+  padding-block: var(--space-12);
+  padding-inline: var(--gutter);
+  max-width: var(--content-width);
+  margin-inline: auto;
+}
+.section--hero { padding-block: var(--space-6) var(--space-8); }
+.section__intro { font-size: 1.1em; }
+
+/* ---------- Top bar: a small two-line button that opens the full-screen index ---------- */
+.site-nav {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 50;
+  background: var(--bg);
+  min-block-size: var(--nav-h);
+  display: flex;
+  align-items: center;
+  padding-inline: var(--gutter);
+}
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--bg);
+  padding: var(--space-4) var(--gutter);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.menu[hidden] { display: none; }
+
+/* ---------- Shared components ---------- */
+/* ---------- Selector rows and hollow dots: the site's one "pick one" pattern ----------
+   Plain display-type text, an optional hollow dot in the item's colour (set --c on the element),
+   and a wavy underline for the selected item (so selection isn't carried by colour alone).
+   Used by lib/selector.js (tabs, filters) and for static technology lists (.chip). */
+.selector { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
+.selector__item, .chip {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  padding-block: 0.25rem;
+  color: var(--text);
+}
+.selector__item { cursor: pointer; }
+.selector__item[data-dot]::before, .chip::before {
+  content: "";
+  inline-size: 0.8rem;
+  block-size: 0.8rem;
+  border: 2.5px solid var(--c, var(--text-dim));
+  border-radius: 50%; /* hollow dot */
+  flex: none;
+}
+.selector__item:hover { text-decoration: underline wavy var(--accent) 1.5px; text-underline-offset: 0.3em; }
+.selector__item[aria-selected="true"], .selector__item[aria-checked="true"] {
+  text-decoration: underline wavy var(--accent) 3px;
+  text-underline-offset: 0.3em;
+}
+.selector__item:focus-visible { outline: 3px solid var(--text); outline-offset: 4px; }
+
+/* A block of information separated by a rule on top (no box). */
+.card { border-block-start: var(--rule) solid var(--border); padding-block-start: var(--space-2); }
+
+/* Dot meter (lib/meters.js): hollow = empty, filled = value. Colour from --c, else ink. */
+.dots { display: inline-flex; gap: 0.4rem; }
+.dot { inline-size: 1.1rem; block-size: 1.1rem; border-radius: 50%; border: 2.5px solid var(--c, var(--border)); }
+.dot--on { background: var(--c, var(--accent)); }
+.dots--sm { gap: 0.25rem; }
+.dots--sm .dot { inline-size: 0.8rem; block-size: 0.8rem; border-width: 2px; }
+
+.placeholder {
+  border: var(--rule) dashed var(--border);
+  padding: var(--space-4);
+  text-align: center;
+  margin-block-start: var(--space-4);
+}
+.hero__chips { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-block-start: var(--space-3); }
+
+.site-footer {
+  padding: var(--space-8) var(--gutter) var(--space-12);
+  max-width: var(--content-width);
+  margin-inline: auto;
+  font-size: var(--fs-small);
+}
+
+/* ---------- Motion ----------
+   The only entrance animation is the hero drawing (see sections/hero.js). Elements that still carry
+   [data-reveal] start hidden ONLY when JS is running (.js class set in main.js). */
+.js [data-reveal] { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js [data-reveal] { opacity: 1 !important; transform: none !important; }
+}

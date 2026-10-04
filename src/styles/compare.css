@@ -1,0 +1,9 @@
+/* Mechanism comparison: reuses the table styles from materials.css (.mat-table, .table-wrap). */
+
+.cmp { margin-block-start: var(--space-6); }
+.cmp table { min-inline-size: 62rem; }
+.cmp td { vertical-align: top; }
+.cmp .cmp-range { min-inline-size: 11rem; }
+.cmp .cmp-range .spec__note { margin: 0.35rem 0 0; }
+.cmp .range__track { block-size: 0.7rem; }
+.cmp .chip { font-size: 1.05rem; }

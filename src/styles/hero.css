@@ -1,0 +1,22 @@
+/* Hero: giant title, one justified paragraph, technology list, hand-drawn printer. */
+
+.hero__techs { display: flex; flex-wrap: wrap; gap: var(--space-1); max-inline-size: none; margin-block-start: var(--space-3); }
+.hero__art { margin-block-start: var(--space-8); }
+
+.hero-art {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 30rem;
+  margin-inline: auto;
+  block-size: auto;
+  overflow: visible;
+  filter: url(#wobble); /* hand-drawn wobble, defined in index.html */
+}
+.hero-art * {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hero-art .fill { fill: var(--t-fdm); }
