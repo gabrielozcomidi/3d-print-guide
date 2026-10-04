@@ -214,7 +214,7 @@ for (const t of fdmTypes) {
 
 // Print Day game: every object is complete, spots are valid, a decoy exists, options are complete
 checkUnique(gameObjects, "game objects");
-const SHAPES = ["ellipsoid", "box", "cylinder", "cone"];
+const SHAPES = ["ellipsoid", "box", "cylinder", "cone", "frustum"];
 const isPoint = (p) => Array.isArray(p) && p.length === 3 && p.every(Number.isFinite);
 for (const o of gameObjects) {
   const w = `game object ${o.id}`;

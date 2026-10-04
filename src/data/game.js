@@ -7,8 +7,9 @@
 // MODEL SPACE (used by the step drawings AND the finale, so every object is described once):
 //   x = left/right, z = front/back, y = up (0 = the print bed). Roughly: height <= 100, width <= 100.
 //   parts[]  the object, built from simple shapes. `at` is the centre of the part's bottom face,
-//            `size` is [width, height, depth]. shape: "ellipsoid" | "box" | "cylinder" | "cone"
-//            (cone = round base tapering to a point at the top).
+//            `size` is [width, height, depth]. shape: "ellipsoid" | "box" | "cylinder" | "cone" | "frustum"
+//            (cone = round base tapering to a point at the top; frustum = cone with the tip cut off, its top is
+//            `taper` x the base width, default 0.6).
 //   supports[] the spots the player taps in step 4. `needs: true` = a real overhang (nothing underneath).
 //            `needs: false` = a decoy: it looks scary but prints fine. `why` is the one-line explanation shown after the tap.
 //   hole     where the gap in the mesh is (step 2): { at:[x,y,z] }.
@@ -51,12 +52,12 @@ export const objects = [
       { id: "cabin", shape: "box", at: [-8, 14, 0], size: [22, 16, 16] },
       { id: "mast", shape: "cylinder", at: [14, 14, 0], size: [4, 46, 4] },
       { id: "bowsprit", shape: "box", at: [44, 14, 0], size: [22, 4, 6] },
-      { id: "rudder", shape: "box", at: [-44, 6, 0], size: [14, 4, 10] },
+      { id: "rudder", shape: "box", at: [-42, 6, 0], size: [14, 4, 10] },
     ],
     hole: { at: [10, 8, 12], where: "בצד גוף הספינה" },
     supports: [
       { id: "bowsprit", at: [50, 14, 0], label: "החרטום הבולט", needs: true, why: "קצה החרטום בולט מעבר לגוף הספינה. מתחתיו אוויר, ולכן צריך תמיכה." },
-      { id: "rudder", at: [-46, 6, 0], label: "ההגה בירכתיים", needs: true, why: "ההגה תלוי מעל המיטה בלי כלום מתחתיו. צריך תמיכה." },
+      { id: "rudder", at: [-44, 6, 0], label: "ההגה בירכתיים", needs: true, why: "ההגה תלוי מעל המיטה בלי כלום מתחתיו. צריך תמיכה." },
       { id: "mast", at: [14, 50, 0], label: "התורן", needs: false, why: "התורן גבוה ודק, אבל כל שכבה שלו נבנית על השכבה שמתחתיה. אין שום פער, ולכן אין צורך בתמיכה." },
     ],
     finale: "הספינה מוכנה להפלגה.",
@@ -67,16 +68,16 @@ export const objects = [
     blurb: "מגדלור עם מרפסת, חדר מנורה וגג.",
     parts: [
       { id: "base", shape: "cylinder", at: [0, 0, 0], size: [34, 10, 34] },
-      { id: "tower", shape: "cone", at: [0, 10, 0], size: [26, 48, 26] },
+      { id: "tower", shape: "frustum", taper: 0.6, at: [0, 10, 0], size: [26, 48, 26] },
       { id: "gallery", shape: "cylinder", at: [0, 58, 0], size: [34, 4, 34] },
       { id: "lamp", shape: "cylinder", at: [0, 62, 0], size: [14, 12, 14] },
       { id: "roof", shape: "cone", at: [0, 74, 0], size: [18, 12, 18] },
-      { id: "ledge", shape: "box", at: [22, 34, 0], size: [16, 3, 10] },
+      { id: "ledge", shape: "box", at: [18, 34, 0], size: [16, 3, 10] },
     ],
     hole: { at: [0, 30, 12], where: "בגוף המגדלור" },
     supports: [
       { id: "gallery", at: [0, 58, 17], label: "טבעת המרפסת", needs: true, why: "המרפסת רחבה בהרבה מראש המגדלור. מתחתיה אוויר, ולכן צריך תמיכה." },
-      { id: "ledge", at: [26, 34, 0], label: "מרפסת הצד", needs: true, why: "המרפסת בולטת מדופן המגדלור בלי כלום מתחתיה. צריך תמיכה." },
+      { id: "ledge", at: [24, 34, 0], label: "מרפסת הצד", needs: true, why: "המרפסת בולטת מדופן המגדלור בלי כלום מתחתיה. צריך תמיכה." },
       { id: "roof", at: [0, 76, 9], label: "שולי הגג", needs: false, why: "הגג בולט רק מעט. מדפסת מצליחה לגשר על פער קטן כזה בלי תמיכה." },
     ],
     finale: "המגדלור עומד על הרציף.",

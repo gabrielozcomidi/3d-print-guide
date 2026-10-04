@@ -19,7 +19,10 @@ export function partShapes(parts, attrs = {}) {
     const [x, y] = p.at;
     const [w, hgt] = p.size;
     if (p.shape === "ellipsoid") return svgEl("ellipse", { cx: x, cy: -(y + hgt / 2), rx: w / 2, ry: hgt / 2, ...attrs });
-    if (p.shape === "cone") return svgEl("polygon", { points: `${x - w / 2},${-y} ${x + w / 2},${-y} ${x},${-(y + hgt)}`, ...attrs });
+    if (p.shape === "cone" || p.shape === "frustum") {
+      const top = p.shape === "cone" ? 0 : (p.taper ?? 0.6); // top width as a fraction of the base
+      return svgEl("polygon", { points: `${x - w / 2},${-y} ${x + w / 2},${-y} ${x + (w / 2) * top},${-(y + hgt)} ${x - (w / 2) * top},${-(y + hgt)}`, ...attrs });
+    }
     return svgEl("rect", { x: x - w / 2, y: -(y + hgt), width: w, height: hgt, ...attrs }); // box and cylinder look alike from the side
   });
 }
@@ -44,6 +47,7 @@ export function halfWidthAt(parts, y) {
     let half = w / 2;
     if (p.shape === "ellipsoid") half = (w / 2) * Math.sqrt(Math.max(0, 1 - (2 * t - 1) ** 2));
     else if (p.shape === "cone") half = (w / 2) * (1 - t);
+    else if (p.shape === "frustum") half = (w / 2) * (1 - t * (1 - (p.taper ?? 0.6)));
     best = Math.max(best, half);
   }
   return best;
