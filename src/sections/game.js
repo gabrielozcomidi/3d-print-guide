@@ -1,43 +1,100 @@
 // Section: the "Print Day" game. A short run through one print, one small action per step (see
-// docs/superpowers/specs/2026-10-04-print-day-game-design.md). This module owns the page: header, progress
-// and the stage; each step's screen lives in lib/game/steps/ and is mounted into the stage.
+// docs/superpowers/specs/2026-10-04-print-day-game-design.md). This module owns the page: header, progress,
+// the object drawing and the panel; each step's screen lives in lib/game/steps/ and is mounted into the panel.
 // Wording and per-object data: src/data/game.js.
 import "../styles/game.css";
 import { h } from "../lib/dom.js";
+import { bidi } from "../lib/bidi.js";
 import { sectionHeader } from "../lib/section.js";
 import { createGame } from "../lib/game/engine.js";
-import { steps as STEPS } from "../data/game.js"; // play order and step names
+import { createFigure } from "../lib/game/figure.js";
+import { steps as STEPS, objects, choose, repair, slice, supportsStep, firstLayer, finish } from "../data/game.js";
+import * as chooseStep from "../lib/game/steps/choose.js";
+import * as repairStep from "../lib/game/steps/repair.js";
+import * as sliceStep from "../lib/game/steps/slice.js";
+import * as supportsScreen from "../lib/game/steps/supports.js";
+import * as placeholder from "../lib/game/steps/placeholder.js";
+
+// step id -> its screen and its prompt. firstLayer and finish are built in later tasks.
+const SCREENS = {
+  choose: { screen: chooseStep, prompt: choose.prompt },
+  repair: { screen: repairStep, prompt: repair.prompt },
+  slice: { screen: sliceStep, prompt: slice.prompt },
+  supports: { screen: supportsScreen, prompt: supportsStep.prompt },
+  firstLayer: { screen: placeholder, prompt: firstLayer.prompt },
+  finish: { screen: placeholder, prompt: finish.prompt },
+};
+
+const freshState = () => ({ objectId: null, repaired: false, layerId: null, infillId: null, found: [], done: {} });
 
 /** @param {HTMLElement} el the <section id="game"> element */
 export function render(el) {
   const game = createGame(STEPS.map((s) => s.id));
+  let state = freshState();
+  const figure = createFigure();
+  let mounted = null; // { destroy }
 
-  // progress: numbers are a real sequence here. Outlined = still ahead, filled = done or current.
+  // progress: numbers are a real sequence here. Filled = done or current.
   const items = STEPS.map((s, i) =>
     h("li", { class: "game-progress__item" }, h("span", { class: "game-progress__num", "aria-hidden": "true" }, String(i + 1)), h("span", { class: "game-progress__title" }, s.title))
   );
   const progress = h("ol", { class: "game-progress", "aria-label": "שלבי המשחק" }, items);
 
-  const stage = h("div", { class: "game-stage" });
-  const prompt = h("p", { class: "game-stage__prompt", "aria-live": "polite" });
+  const prompt = h("h3", { class: "game-stage__prompt" });
+  const body = h("div", { class: "game-stage__body" });
+  const feedback = h("p", { class: "game-stage__feedback", "aria-live": "polite" });
   const back = h("button", { class: "game-btn", type: "button" }, "הקודם");
   const next = h("button", { class: "next-btn", type: "button" }, h("span", {}, "הבא"));
   back.addEventListener("click", () => game.back());
   next.addEventListener("click", () => game.next());
+  const panel = h("div", { class: "game-panel" }, prompt, body, feedback, h("div", { class: "game-stage__actions" }, back, next));
+  const stage = h("div", { class: "game-stage" }, h("div", { class: "game-figure-wrap" }, figure.svg), panel);
 
-  function show({ index }) {
+  /** what a step may do: see lib/game/steps/*.js */
+  const ctx = {
+    state,
+    figure,
+    object: () => objects.find((o) => o.id === state.objectId),
+    say: (text) => (feedback.textContent = text),
+    miss: () => game.retry(),
+    complete() {
+      state.done[game.id] = true;
+      refreshNav();
+    },
+    setObject(id) {
+      if (id === state.objectId) return;
+      // a different object: everything after "choose" starts over
+      Object.assign(state, freshState(), { objectId: id });
+      ctx.state = state;
+      figure.setObject(ctx.object());
+      refreshNav();
+    },
+  };
+
+  function refreshNav() {
+    const done = STEPS.filter((s) => state.done[s.id]).length;
+    figure.setProgress(done / STEPS.length);
     items.forEach((li, i) => {
-      li.classList.toggle("is-done", i < index);
-      if (i === index) li.setAttribute("aria-current", "step");
+      li.classList.toggle("is-done", !!state.done[STEPS[i].id]);
+      if (i === game.index) li.setAttribute("aria-current", "step");
       else li.removeAttribute("aria-current");
     });
-    prompt.textContent = `שלב ${index + 1} מתוך ${STEPS.length}: ${STEPS[index].title}`; // placeholder until the step screens exist
-    back.disabled = index === 0;
-    next.disabled = index === STEPS.length - 1;
+    back.disabled = game.index === 0;
+    next.disabled = game.index === STEPS.length - 1 || !state.done[game.id];
+  }
+
+  function show() {
+    mounted?.destroy();
+    figure.clearOverlay();
+    body.replaceChildren();
+    feedback.textContent = "";
+    const { screen, prompt: text } = SCREENS[game.id];
+    prompt.innerHTML = bidi(text);
+    mounted = screen.mount(body, ctx);
+    refreshNav();
   }
   game.onChange(show);
 
-  stage.append(prompt, h("div", { class: "game-stage__actions" }, back, next));
   el.append(...sectionHeader("game"), progress, stage);
-  show({ index: game.index });
+  show();
 }

@@ -22,11 +22,65 @@
   .game-progress__item[aria-current="step"] .game-progress__title { display: inline; }
 }
 
-/* ---------- Stage ---------- */
-.game-stage { border-block: var(--rule) solid var(--border); padding-block: var(--space-6); display: grid; gap: var(--space-4); min-block-size: 18rem; align-content: start; }
-.game-stage__prompt { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.4rem, 1rem + 2vw, 2rem); line-height: 1.2; margin: 0; max-inline-size: none; text-align: start; }
+/* ---------- Stage: the object on one side, the current step on the other ---------- */
+.game-stage { border-block: var(--rule) solid var(--border); padding-block: var(--space-6); display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: var(--space-8); align-items: start; }
+.game-figure-wrap { max-inline-size: 22rem; inline-size: 100%; margin-inline: auto; }
+.game-figure { display: block; inline-size: 100%; block-size: auto; overflow: visible; }
+.game-panel { display: grid; gap: var(--space-3); align-content: start; min-block-size: 20rem; }
+.game-stage__prompt { font-size: clamp(1.4rem, 1rem + 2vw, 2rem); line-height: 1.2; margin: 0; }
+.game-stage__feedback { margin: 0; min-block-size: 3.5em; font-size: 1.05em; }
 .game-stage__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.game-label { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; margin: var(--space-2) 0 0; color: var(--text); }
+@media (max-width: 820px) {
+  .game-stage { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+  /* stacked layout: keep the object pinned under the top bars so the markers you tap and the text that answers stay on one screen */
+  .game-figure-wrap { position: sticky; inset-block-start: calc(var(--nav-h) + 2.75rem); z-index: 5; background: var(--bg); inline-size: 100%; max-inline-size: none; padding-block: var(--space-1); border-block-end: 1px dashed var(--border); }
+  .game-figure { max-block-size: 8.5rem; margin-inline: auto; } /* full-width bar, so nothing scrolls visibly behind the object */
+  .game-panel { min-block-size: 0; }
+}
 
+/* ---------- Drawing: one ink silhouette, paper on top, the printed part in the FDM colour ---------- */
+.fig-ink { fill: var(--accent); stroke: var(--accent); stroke-width: 3; stroke-linejoin: round; }
+.fig-paper { fill: var(--bg); stroke: none; }
+.fig-print { fill: var(--t-fdm); stroke: none; }
+.fig-bed { stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+.fig-cuts line { stroke: var(--accent); stroke-width: 0.6; opacity: 0.7; }
+.fig-supports polyline { fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-linejoin: round; }
+
+/* ---------- Choose: three big tiles ---------- */
+.game-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: var(--space-3); }
+.game-tile { all: unset; box-sizing: border-box; cursor: pointer; display: grid; justify-items: center; align-content: start; gap: 0.4rem; text-align: center; padding: var(--space-2); border: var(--rule) solid var(--border); border-radius: var(--radius); min-block-size: 44px; }
+.game-tile:hover { background: color-mix(in srgb, var(--accent) 8%, var(--bg)); }
+.game-tile[aria-pressed="true"] { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: -4px; }
+.game-tile:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+.game-tile__name { font-family: var(--font-display); font-weight: 900; font-size: 1.35rem; color: var(--accent); }
+.game-tile__blurb { font-size: var(--fs-small); line-height: 1.4; }
+.game-mini { inline-size: 100%; max-inline-size: 7rem; block-size: auto; overflow: visible; }
+
+/* ---------- Repair and supports: markers drawn on top of the figure ---------- */
+.game-hole, .game-spot { cursor: pointer; outline: none; }
+.game-hole__hit, .game-spot__hit { fill: transparent; }
+.game-hole__ring { fill: none; stroke: var(--text); stroke-width: 1.6; stroke-dasharray: 3 2.4; }
+.game-hole.is-hinted .game-hole__ring { animation: game-pulse 0.9s ease-in-out infinite alternate; }
+.game-hole.is-fixed .game-hole__ring { fill: var(--t-fdm); stroke: var(--accent); stroke-dasharray: none; }
+.game-spot__dot { fill: var(--bg); stroke: var(--text); stroke-width: 1.8; }
+.game-spot.is-yes .game-spot__dot { fill: var(--accent); stroke: var(--accent); }
+.game-spot.is-no .game-spot__dot { fill: var(--bg); stroke: var(--text-dim); stroke-dasharray: 2 2; }
+.game-hole:focus-visible .game-hole__hit, .game-spot:focus-visible .game-spot__hit { stroke: var(--text); stroke-width: 2; }
+@keyframes game-pulse { from { stroke-width: 1.6; } to { stroke-width: 3.4; } }
+@media (prefers-reduced-motion: reduce) { .game-hole.is-hinted .game-hole__ring { animation: none; stroke-width: 3; } }
+
+/* ---------- Slice: live meters and an infill cross-section ---------- */
+.game-slice { display: grid; gap: var(--space-2); justify-items: start; }
+.game-slice__result { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-6); margin-block-start: var(--space-2); }
+.game-meters { display: grid; gap: 0.35rem; --c: var(--accent); }
+.game-meters__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font-family: var(--font-display); font-weight: 800; min-inline-size: 13rem; }
+.game-infill { inline-size: 5.5rem; block-size: auto; }
+.game-infill__wall { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+.game-infill__lines line { stroke: var(--t-fdm); stroke-width: 1.2; }
+.game-slice__mm { margin: 0; font-family: var(--font-display); font-weight: 800; color: var(--accent); }
+
+/* ---------- Buttons ---------- */
 /* secondary button: outlined pill, same family as the menu button and .next-btn */
 .game-btn {
   all: unset;

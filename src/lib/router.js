@@ -65,7 +65,7 @@ function show(chapterId, sectionId, { initial = false } = {}) {
     syncToc();
   }
   const bar = document.querySelector(".site-nav__title");
-  if (bar) bar.textContent = `${chapter.title} (${index + 1} מתוך ${chapters.length})`;
+  if (bar) bar.replaceChildren(`${chapter.title} `, h("span", { class: "nw" }, `(${index + 1} מתוך ${chapters.length})`)); // the count never splits across lines
   document.title = `${chapter.title} | מדריך חזותי להדפסת תלת־ממד`;
 
   // jump to the right place
