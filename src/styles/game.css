@@ -35,7 +35,7 @@
   .game-stage { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
   /* stacked layout: keep the object pinned under the top bars so the markers you tap and the text that answers stay on one screen */
   .game-figure-wrap { position: sticky; inset-block-start: calc(var(--nav-h) + 2.75rem); z-index: 5; background: var(--bg); inline-size: 100%; max-inline-size: none; padding-block: var(--space-1); border-block-end: 1px dashed var(--border); }
-  .game-figure { max-block-size: 8.5rem; margin-inline: auto; } /* full-width bar, so nothing scrolls visibly behind the object */
+  .game-figure { max-block-size: 7rem; margin-inline: auto; } /* full-width bar, so nothing scrolls visibly behind the object */
   .game-panel { min-block-size: 0; }
 }
 
@@ -80,6 +80,18 @@
 .game-infill__lines line { stroke: var(--t-fdm); stroke-width: 1.2; }
 .game-slice__mm { margin: 0; font-family: var(--font-display); font-weight: 800; color: var(--accent); }
 
+/* ---------- First layer: close-up of the nozzle, and the printing nozzle on the figure ---------- */
+.game-first-wrap { min-block-size: 9rem; }
+.game-first { inline-size: 100%; max-inline-size: 20rem; block-size: auto; overflow: visible; }
+.game-first * { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.game-first__nozzle rect, .game-first__nozzle polygon { fill: var(--bg); }
+.game-first__line { stroke: var(--t-fdm); stroke-width: 4; }
+.game-first__line--right { stroke-width: 5; }
+.game-first__line--low { stroke-width: 2; }
+.fig-nozzle * { fill: var(--bg); stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.fig-nozzle line { fill: none; }
+.selector[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+
 /* ---------- Buttons ---------- */
 /* secondary button: outlined pill, same family as the menu button and .next-btn */
 .game-btn {
@@ -99,5 +111,7 @@
 }
 .game-btn:hover { background: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
 .game-btn:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+/* these buttons set their own display, which would otherwise beat the [hidden] attribute */
+.next-btn[hidden], .game-btn[hidden] { display: none; }
 .game-btn:disabled, .next-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .game-stage .next-btn { min-block-size: 2.75rem; }

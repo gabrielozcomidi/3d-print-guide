@@ -13,6 +13,7 @@ import * as chooseStep from "../lib/game/steps/choose.js";
 import * as repairStep from "../lib/game/steps/repair.js";
 import * as sliceStep from "../lib/game/steps/slice.js";
 import * as supportsScreen from "../lib/game/steps/supports.js";
+import * as firstLayerStep from "../lib/game/steps/firstLayer.js";
 import * as placeholder from "../lib/game/steps/placeholder.js";
 
 // step id -> its screen and its prompt. firstLayer and finish are built in later tasks.
@@ -21,11 +22,11 @@ const SCREENS = {
   repair: { screen: repairStep, prompt: repair.prompt },
   slice: { screen: sliceStep, prompt: slice.prompt },
   supports: { screen: supportsScreen, prompt: supportsStep.prompt },
-  firstLayer: { screen: placeholder, prompt: firstLayer.prompt },
+  firstLayer: { screen: firstLayerStep, prompt: firstLayer.prompt },
   finish: { screen: placeholder, prompt: finish.prompt },
 };
 
-const freshState = () => ({ objectId: null, repaired: false, layerId: null, infillId: null, found: [], done: {} });
+const freshState = () => ({ objectId: null, repaired: false, layerId: null, infillId: null, found: [], printed: false, done: {} });
 
 /** @param {HTMLElement} el the <section id="game"> element */
 export function render(el) {
@@ -73,7 +74,7 @@ export function render(el) {
 
   function refreshNav() {
     const done = STEPS.filter((s) => state.done[s.id]).length;
-    figure.setProgress(done / STEPS.length);
+    figure.setProgress(state.printed ? 1 : Math.min(done, STEPS.length - 1) / STEPS.length); // a finished print shows the whole part
     items.forEach((li, i) => {
       li.classList.toggle("is-done", !!state.done[STEPS[i].id]);
       if (i === game.index) li.setAttribute("aria-current", "step");
@@ -85,6 +86,7 @@ export function render(el) {
 
   function show() {
     mounted?.destroy();
+    figure.stopPrint();
     figure.clearOverlay();
     body.replaceChildren();
     feedback.textContent = "";

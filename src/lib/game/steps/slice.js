@@ -26,6 +26,8 @@ export function mount(host, ctx) {
   const infillSel = selector({ label: "מילוי", role: "radio", items: slice.infills.map((i) => ({ id: i.id, label: i.label })), selected: ctx.state.infillId, onSelect: (id) => choose("infill", id) });
 
   function choose(kind, id) {
+    ctx.state.printed = false; // a different slice means a different print
+    ctx.state.done.firstLayer = false;
     if (kind === "layer") { pick.layer = slice.layerHeights.find((l) => l.id === id); ctx.state.layerId = id; }
     else { pick.infill = slice.infills.find((i) => i.id === id); ctx.state.infillId = id; }
     render();
