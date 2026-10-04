@@ -6,7 +6,9 @@
 
 export const chapters = [
   { id: "start", title: "מתחילים", sections: ["hero", "overview"] },
-  { id: "machines", title: "המכונות", sections: ["technologies", "fdmtypes", "industrial", "compare"] },
+  { id: "machines", title: "סוגי מדפסות", sections: ["technologies", "industrial", "compare"] },
+  // the six FDM motion systems live on their own page, linked from the FDM explanation
+  { id: "fdm", title: "סוגי מדפסות FDM", sections: ["fdmtypes"] },
   { id: "prepare", title: "מדגם להדפסה", sections: ["workflow", "supports", "infill"] },
   { id: "materials", title: "חומרים", sections: ["materials"] },
   { id: "fix", title: "תקלות ופתרונות", sections: ["troubleshooting"] },

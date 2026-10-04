@@ -14,3 +14,7 @@
 /* switch between the top view and the Z-axis view above the drawing */
 .view-switch { margin-block-end: var(--space-2); gap: var(--space-1) var(--space-3); }
 .view-switch .selector__item { font-size: 1rem; }
+
+/* way back to the FDM explanation ("next" buttons point the reading direction, this one points back) */
+.fdm-back { margin-block: var(--space-3) 0; }
+[dir="rtl"] .fdm-back .flow-arrow { transform: none; } /* a way BACK points the other way: right in Hebrew */

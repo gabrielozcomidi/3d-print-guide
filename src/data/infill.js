@@ -2,7 +2,7 @@
 //
 // Fields: id, name (English), how, callsIt ([slicer, name] pairs: what slicers call it), ratings (1-5, 5 = better for
 // that axis: strength, speed, material = saves material, top = supports the top surface),
-// pros[], cons[], bestFor, fixedDensity (a note, set when the percentage barely applies).
+// pros[], cons[], bestFor, densityNote (an optional note shown under the slider).
 // Ratings are relative comparisons between patterns at the same density, not measurements.
 
 export const patterns = [
@@ -85,7 +85,7 @@ export const patterns = [
     pros: ["הכי חסכוני בחומר", "תומך רק במה שצריך, מתחת למשטח העליון"],
     cons: ["כמעט לא מוסיף חוזק"],
     bestFor: "פסלונים ודגמי תצוגה.",
-    fixedDensity: "המילוי הזה כמעט לא תלוי באחוז: הוא מוסיף רק מה שצריך מתחת למשטח העליון.",
+    densityNote: "המילוי הזה נבנה רק מתחת למשטח העליון, לכן גם באחוז גבוה הוא נשאר דליל.",
   },
 ];
 

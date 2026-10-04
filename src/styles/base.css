@@ -120,10 +120,18 @@ h1 bdi.nw, h2 bdi.nw, h3 bdi.nw { white-space: normal; } /* big headings: even a
 }
 .selector__item:hover { text-decoration: underline wavy var(--accent) 1.5px; text-underline-offset: 0.3em; }
 .selector__item[aria-selected="true"], .selector__item[aria-checked="true"] {
+  color: var(--accent);
   text-decoration: underline wavy var(--accent) 3px;
   text-underline-offset: 0.3em;
 }
+/* hollow dot = not chosen, filled dot = the one you are looking at */
+.selector__item[data-dot][aria-selected="true"]::before, .selector__item[data-dot][aria-checked="true"]::before { background: var(--c); }
 .selector__item:focus-visible { outline: 3px solid var(--text); outline-offset: 4px; }
+
+/* Logo (lib/logo.js): outline in ink, printed layers in the FDM colour, like the hero drawing. */
+.logo { flex: none; inline-size: 2.25rem; block-size: 2.25rem; overflow: visible; }
+.logo * { fill: none; stroke: var(--accent); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.logo .fill { fill: var(--t-fdm); }
 
 /* A block of information separated by a rule on top (no box). */
 .card { border-block-start: var(--rule) solid var(--border); padding-block-start: var(--space-2); }
@@ -159,3 +167,26 @@ h1 bdi.nw, h2 bdi.nw, h3 bdi.nw { white-space: normal; } /* big headings: even a
   html { scroll-behavior: auto; }
   .js [data-reveal] { opacity: 1 !important; transform: none !important; }
 }
+
+/* "next step": a real button (outlined pill like the menu button, arrow pointing the reading direction) */
+.next-btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--on-accent);
+  background: var(--accent);
+  padding: 0.8rem 1.4rem;
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+.next-btn .flow-arrow { inline-size: 2rem; block-size: 0.9rem; }
+.next-btn .flow-arrow path { stroke: currentColor; } /* the shared arrow is ink-coloured; here it sits on ink */
+.next-btn:hover { background: var(--text); }
+.next-btn:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }

@@ -1,13 +1,11 @@
 // Section: "how it works, in general". A vase is shown in three stages as you scroll: the 3D shape,
 // the cut into thin slices (what a "slicer" does), and the layers being built from the bottom up.
-// Below: one line per technology on HOW it makes a layer (the real difference between them).
 import "../styles/overview.css";
 import { h } from "../lib/dom.js";
 import { bidi } from "../lib/bidi.js";
 import { svgEl } from "../lib/svg.js";
 import { sectionHeader } from "../lib/section.js";
 import { ScrollTrigger, prefersReducedMotion } from "../lib/reveal.js";
-import { technologies } from "../data/technologies.js";
 import { set } from "../diagrams/kit.js";
 
 const STEPS = [
@@ -68,16 +66,7 @@ export function render(el) {
   const figure = h("div", { class: "overview__figure" }, svg);
   el.append(
     ...sectionHeader("overview"),
-    h("div", { class: "overview__top" }, figure, h("ol", { class: "steps" }, stepItems)),
-    h("h3", { class: "overview__how" }, "ההבדל: איך נוצרת כל שכבה"),
-    h(
-      "dl",
-      { class: "layer-by" },
-      technologies.map((t) => [
-        h("dt", { style: `--c: var(${t.color})` }, h("span", { class: "chip", html: bidi(t.name) })),
-        h("dd", { html: bidi(t.layerBy) }),
-      ]).flat()
-    )
+    h("div", { class: "overview__top" }, figure, h("ol", { class: "steps" }, stepItems))
   );
 
   if (prefersReducedMotion()) {

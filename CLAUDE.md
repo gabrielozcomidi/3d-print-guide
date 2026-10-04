@@ -47,7 +47,9 @@ Rule 1.5px, radius 4px, 8px grid, measure 38rem.
 - Navigation: two-line button opens a full-screen index (built from `copy.js`).
 - **Printer-type drawings** (`diagrams/bedslinger|corexy|delta|polar|scara|belt.js`, helpers in `diagrams/kit.js`): ONE rule on all of them: tinted = moves, outlined = fixed, technology colour = printed part. Each is a pure function `draw(p)` of progress. Share `lib/diagramFrame.js` with the technologies panel.
 - **Powder-bed diagrams** (sls, mjf, dmls, binder) share `diagrams/powderbed.js`: state object `S` tweened by a GSAP timeline, scene re-rendered from it; each diagram only adds its energy source (laser / sprayer / lamp).
-- **Radar** (`lib/radar.js`): `radar()` returns an SVG with `update(values)`; the materials section keeps ONE big radar and morphs it when another material is picked (jumps with reduced motion). `animateIn` grows it from the centre when first visible.
+- **Radar** (`lib/radar.js`): `radar({axes, series:[{id,values,color}]})` returns an SVG with `update(series)`; shapes are matched by id (added = grow from centre, removed = shrink, changed = morph; jumps with reduced motion). Several series overlay in their own colour (multiply blend, see-through fill); numbers next to axis names show only for one series. The materials section keeps ONE big radar; tiles are multi-select toggles, the legend (a `selector`) picks whose details show. Material colours are `--m-1..--m-8` (tokens.css, contrast-checked), assigned by position inside the family (`materialColor` in materials.js).
+- **Hero drawing** (`sections/hero.js`): after the stroke-by-stroke intro it loops forever: the nozzle rises one layer at a time, sweeps (alternating direction) revealing each layer behind it, holds the finished part, wipes it, repeats. Pauses off-screen; static finished picture with reduced motion.
+- **Logo** (`lib/logo.js`): small printer drawing in the nav bar, side rail, footer; the favicon in index.html is the same drawing.
 - **bidi()**: short English runs (<=16 chars) get `bdi.nw` (no line break); long English phrases may wrap. Never join several English names with ", " in one string; render lists.
 - **Supports/infill demos**: `diagrams/supportsDemo.js` (state-driven scene: bare / with / removed) and `diagrams/infillDemo.js` (path generators per pattern id, checked by the validator). Slicer names for a feature use `lib/callsit.js` ([slicer, name] rows, always LTR).
 - Diagram legends use `kind` glyphs (dash | box | hot | fill | line | resin) because everything is red ink.
@@ -60,7 +62,7 @@ Rule 1.5px, radius 4px, 8px grid, measure 38rem.
 - Production build: ~210 KB, 6 requests, first paint ~350 ms, no external requests.
 
 ## Navigation (user request: "less doom scrolling")
-- The page is split into 6 CHAPTERS (`src/data/chapters.js`: start, machines, prepare, materials, fix, choose); only one chapter is visible at a time. Edit that file to regroup sections.
+- The page is split into 7 CHAPTERS (`src/data/chapters.js`: start, machines ("סוגי מדפסות": technologies, industrial, compare), fdm (its own page for the six FDM motion systems, linked from the FDM panel and back), prepare, materials, fix, choose); only one chapter is visible at a time. Edit that file to regroup sections.
 - `lib/router.js` does it all at runtime: moves the existing `<section>`s into `div.chapter`, builds the desktop side rail (right side in RTL, from 56rem width), the phone top bar with the chapter name + a quick-link row, the full-screen index, and an end-of-chapter "next chapter" link. The URL hash selects the view (`#machines` = chapter, `#compare` = a section inside its chapter); back button and bookmarks work.
 - Other modules link across chapters with `go("sectionId")` or `link()` from `lib/router.js`, never `scrollIntoView` on another chapter's element (it is hidden).
 - Home page has task-based starting points (`startPaths` in chapters.js).
@@ -125,4 +127,4 @@ Any name or term WITHOUT an official Hebrew name is written in English (machine 
 M0 skeleton + design system + data validation · M1 Technologies section (reference, fully finished) · M2 Materials (5-axis radar + sortable table) · M3 Troubleshooting (technology -> defect gallery -> causes/fixes; 3-4 defects per family first) · M4 Use cases + wizard · M5 Remaining technologies content, industrial, mechanism-comparison chart, hero · M6 polish: a11y, perf, reduced motion, mobile QA, build/hosting notes.
 
 ## Page sections (order)
-Hero · How it works (overview) · Technologies · FDM printer types (6 motion systems) · Industrial (brief) · Compare mechanisms (layer height, supports, post-processing effort, detail) · Materials · Troubleshooting · Use cases · Wizard · Footer.
+Hero · How it works (overview) · Technologies · FDM printer types (6 motion systems, own chapter) · Industrial (brief) · Compare mechanisms (layer height, supports, post-processing effort, detail) · Materials · Troubleshooting · Use cases · Wizard · Footer.

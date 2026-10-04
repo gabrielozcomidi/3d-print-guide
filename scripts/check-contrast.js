@@ -39,6 +39,7 @@ const checks = [
   ["--t-sls", 3],
   ["--t-mjf", 3],
   ["--t-industrial", 3],
+  ...Array.from({ length: 8 }, (_, i) => [`--m-${i + 1}`, 3]), // material colours in the radar
 ];
 
 let bad = 0;

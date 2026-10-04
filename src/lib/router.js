@@ -19,6 +19,7 @@ import { h } from "./dom.js";
 import { bidi } from "./bidi.js";
 import { svgEl } from "./svg.js";
 import { flowArrow } from "./arrow.js";
+import { printerLogo } from "./logo.js";
 import { ScrollTrigger, prefersReducedMotion } from "./reveal.js";
 import { chapters } from "../data/chapters.js";
 import { sections as sectionInfo } from "../data/copy.js";
@@ -226,7 +227,7 @@ export function initNav() {
   const rail = h(
     "nav",
     { class: "rail", id: "rail", "aria-label": "ניווט בפרקים" },
-    h("div", { class: "rail__head" }, link(chapters[0].id, { class: "rail__title" }, "מדריך הדפסת ", h("span", { class: "nw" }, "תלת־ממד")), closeRail),
+    h("div", { class: "rail__head" }, link(chapters[0].id, { class: "rail__title" }, printerLogo(), h("span", {}, "מדריך הדפסת ", h("span", { class: "nw" }, "תלת־ממד"))), closeRail),
     buildToc("rail")
   );
   const openRail = labelled("rail-open-btn", "menu", "תפריט", { "aria-controls": "rail", "aria-label": "פתיחת התפריט" });
@@ -259,7 +260,7 @@ export function initNav() {
   menuBtn.addEventListener("click", () => setMenu(true));
   closeBtn.addEventListener("click", () => setMenu(false));
   document.addEventListener("keydown", (e) => e.key === "Escape" && !menu.hidden && setMenu(false));
-  bar.append(menuBtn, h("span", { class: "site-nav__title" }));
+  bar.append(menuBtn, printerLogo(), h("span", { class: "site-nav__title" }));
   document.body.append(menu);
 
   window.addEventListener("hashchange", () => route(location.hash.slice(1)));

@@ -111,6 +111,7 @@ html .rail-open-btn { display: none; }
 /* ---------- Phone top bar and full-screen index ---------- */
 .site-nav { gap: var(--space-3); }
 .site-nav__btn { padding: 0.5rem 0.95rem; font-size: 1rem; }
+.site-nav .logo { inline-size: 1.9rem; block-size: 1.9rem; }
 .site-nav__title { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--accent); }
 
 .menu { padding-block: var(--space-3) var(--space-8); }
@@ -143,7 +144,7 @@ html .rail-open-btn { display: none; }
 .chapter-next__link:focus-visible { outline: 3px solid var(--text); outline-offset: 6px; }
 
 /* ---------- Home page: where to start ---------- */
-.paths { margin-block-start: var(--space-12); max-inline-size: 46rem; }
+.paths { margin-block-start: clamp(7rem, 14vw, 11rem); max-inline-size: 46rem; }
 .paths__title { font-size: clamp(1.8rem, 1.2rem + 2.5vw, 2.75rem); margin-block-end: var(--space-2); }
 .paths ul { list-style: none; margin: 0; padding: 0; }
 .paths__link { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font-family: var(--font-display); font-weight: 800; font-size: clamp(1.25rem, 1rem + 1.4vw, 1.9rem); line-height: 1.2; color: var(--text); text-decoration: none; padding-block: 0.8rem; border-block-start: var(--rule) solid var(--border); }
@@ -167,7 +168,8 @@ html .rail-open-btn { display: none; }
     border-inline-end: var(--rule) solid var(--border);
   }
   .rail__head { display: grid; justify-items: start; gap: var(--space-3); margin-block-end: var(--space-4); }
-  .rail__title { font-family: var(--font-display); font-weight: 900; font-size: 1.7rem; line-height: 1.1; color: var(--accent); text-decoration: none; }
+  .rail__title { display: flex; align-items: center; gap: var(--space-2); /* logo first = on the right in Hebrew */ font-family: var(--font-display); font-weight: 900; font-size: 1.7rem; line-height: 1.1; color: var(--accent); text-decoration: none; }
+  .rail__title .logo { inline-size: 3rem; block-size: 3rem; }
   .rail__title:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
 
   /* closed: the column shrinks to nothing and a labelled button floats in the corner */

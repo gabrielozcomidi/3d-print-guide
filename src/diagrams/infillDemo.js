@@ -82,7 +82,7 @@ function concentric(s) {
 
 /** A few sparse branching lines that only reach up under the top surface (a "lightning" tree). */
 function lightning(layer, d) {
-  const n = 2 + Math.round(d / 40);
+  const n = 2 + Math.round(d / 17); // 2 trunks at 5% ... 8 at 100%: the slider visibly adds branches
   let out = "";
   for (let i = 0; i < n; i++) {
     const x0 = AREA.x + ((i + 0.5) * AREA.w) / n;

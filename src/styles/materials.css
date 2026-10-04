@@ -7,9 +7,9 @@
 .radar__ring { fill: none; stroke: var(--accent); stroke-width: 1; stroke-dasharray: 2 4; }
 .radar__ring--outer { stroke-width: 2; stroke-dasharray: none; }
 .radar__spoke { stroke: var(--accent); stroke-width: 1; }
-.radar__data { transition: fill 0.5s; fill: var(--c); fill-opacity: 0.55; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; }
-.radar__label { font-family: var(--font-display); font-weight: 800; font-size: 12px; fill: var(--text); }
-.radar__value { font-weight: 900; font-size: 13px; fill: var(--accent); }
+.radar__data { fill: var(--c); fill-opacity: 0.3; stroke: var(--c); stroke-width: 2.5; stroke-linejoin: round; mix-blend-mode: multiply; } /* each material in its own colour; multiply lets overlaps show */
+.radar__label { font-family: var(--font-display); font-weight: 800; font-size: 12px; fill: var(--text); white-space: pre; }
+.radar__value { font-family: var(--font-display); font-weight: 900; font-size: 13px; fill: var(--accent); }
 
 /* ---------- Grid of small radars ---------- */
 .mat-grid {
@@ -29,7 +29,9 @@
 }
 .mat-tile .radar { max-inline-size: 8.5rem; }
 .mat-tile .radar__ring:not(.radar__ring--outer), .mat-tile .radar__spoke { display: none; } /* keep the small ones calm */
-.mat-tile__name { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; line-height: 1.25; }
+.mat-tile__name { display: inline-flex; align-items: center; gap: 0.4rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; line-height: 1.25; }
+.mat-tile__name::before { content: ""; flex: none; inline-size: 0.7rem; block-size: 0.7rem; border: 2.5px solid var(--c); border-radius: 50%; } /* hollow dot = not shown, filled = in the chart */
+.mat-tile[aria-pressed="true"] .mat-tile__name::before { background: var(--c); }
 .mat-tile:hover .mat-tile__name { text-decoration: underline wavy var(--accent) 1.5px; text-underline-offset: 0.3em; }
 .mat-tile[aria-pressed="true"] .mat-tile__name { text-decoration: underline wavy var(--accent) 3px; text-underline-offset: 0.3em; }
 .mat-tile:focus-visible { outline: 3px solid var(--text); outline-offset: 4px; }
@@ -42,7 +44,20 @@
   align-items: start;
   margin-block-end: var(--space-12);
 }
+.mat-hint { font-size: var(--fs-small); margin-block: calc(-1 * var(--space-4)) var(--space-6); }
 .mat-detail__chart { max-inline-size: 28rem; inline-size: 100%; margin-inline: auto; }
+.mat-mode { margin-block-end: var(--space-4); }
+.mat-mode .selector__item { font-size: 1.1rem; }
+/* side by side: the chart column spans the whole row and holds a wrapping grid of radars */
+.mat-detail--separate { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+.mat-detail--separate .mat-detail__chart { max-inline-size: none; }
+.mat-multi { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: var(--space-6) var(--space-4); }
+.mat-multi[hidden] { display: none; }
+.mat-multi__item { margin: 0; display: grid; gap: var(--space-1); justify-items: center; }
+.mat-multi__name { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; }
+.mat-multi__name::before { content: ""; flex: none; inline-size: 0.8rem; block-size: 0.8rem; border-radius: 50%; background: var(--c); }
+.mat-legend { justify-content: center; margin-block-start: var(--space-2); }
+.mat-legend .selector__item { font-size: 1.1rem; }
 .mat-detail__name { font-size: clamp(2.2rem, 1.2rem + 4vw, 4rem); font-weight: 900; line-height: 1; margin-block-end: var(--space-3); overflow-wrap: anywhere; } /* English names are wider than Hebrew ones */
 .mat-detail__text { display: grid; gap: var(--space-3); align-content: start; }
 .mat-detail__text p { margin-block-end: 0; }

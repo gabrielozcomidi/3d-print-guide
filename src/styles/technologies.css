@@ -8,7 +8,7 @@
   inset-block-start: var(--nav-h);
   z-index: 10;
   flex-wrap: nowrap;
-  padding-block: var(--space-1);
+  padding-block: var(--space-1) var(--space-2); /* bottom room: overflow-x clips the wavy underline otherwise */
   margin-block: var(--space-4);
   background: var(--bg);
   overflow-x: auto;
@@ -21,6 +21,9 @@
 }
 
 /* ---------- Panel ---------- */
+.tech-panel__name { display: flex; align-items: center; gap: 0.6rem; font-size: clamp(1.8rem, 1.2rem + 2.5vw, 2.75rem); font-weight: 900; line-height: 1.05; margin-block-end: var(--space-2); }
+.tech-panel__name small { font-family: var(--font-body); font-weight: 400; font-size: 1rem; color: var(--text-dim); }
+.tech-panel__name::before { content: ""; flex: none; inline-size: 1rem; block-size: 1rem; border-radius: 50%; background: var(--c); }
 .tech-panel__lead { font-size: 1.25em; line-height: 1.6; margin-block-end: var(--space-6); }
 .tech-panel__top {
   display: grid;

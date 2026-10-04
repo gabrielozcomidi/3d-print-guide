@@ -56,7 +56,7 @@ function buildStage(stage, index, family, goNext) {
       formatList(family === "resin" && stage.formatsResin ? stage.formatsResin : stage.formats),
       ...(stage.toolGroups ?? []).map((g) => h("div", { class: "toolgroup" }, h("h4", {}, g.label), tags(g.items))),
       seeAlso,
-      goNext ? h("p", {}, (() => { const b = h("button", { class: "link-btn", type: "button" }, "לשלב הבא"); b.addEventListener("click", goNext); return b; })()) : null
+      goNext ? h("p", {}, (() => { const b = h("button", { class: "next-btn", type: "button" }, h("span", {}, "לשלב הבא"), flowArrow()); b.addEventListener("click", goNext); return b; })()) : null
     )
   );
   drawIn(art);

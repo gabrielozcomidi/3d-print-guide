@@ -23,7 +23,7 @@ export function render(el) {
 
   const svg = svgEl("svg", { class: "diagram__svg infill-demo", dir: "ltr" });
   const demo = createInfill(svg);
-  const apply = (trace = true) => demo.set(state.pattern.id, state.pattern.fixedDensity ? 20 : state.density, state.layer, { trace });
+  const apply = (trace = true) => demo.set(state.pattern.id, state.density, state.layer, { trace });
 
   // density slider
   const valueOut = h("output", { class: "density__value", dir: "ltr" }, "20%");
@@ -51,8 +51,7 @@ export function render(el) {
   const info = h("div", { class: "infill-info" });
   function showInfo() {
     const p = state.pattern;
-    slider.disabled = !!p.fixedDensity;
-    densityNote.textContent = p.fixedDensity ? p.fixedDensity : "";
+    densityNote.textContent = p.densityNote ?? "";
     info.replaceChildren(
       h("h3", { class: "support-info__name", html: bidi(p.name) }),
       h("p", { class: "tech-panel__lead", html: bidi(p.how) }),

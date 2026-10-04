@@ -6,6 +6,7 @@ import "./styles/layout.css";
 
 import { h } from "./lib/dom.js";
 import { bidi } from "./lib/bidi.js";
+import { printerLogo } from "./lib/logo.js";
 import { initNav } from "./lib/router.js";
 import { footerNote } from "./data/copy.js";
 
@@ -33,7 +34,7 @@ for (const [id, render] of Object.entries(renderers)) {
 }
 
 // Footer
-document.getElementById("footer").append(h("p", { html: bidi(footerNote) }));
+document.getElementById("footer").append(printerLogo(), h("p", { html: bidi(footerNote) }));
 
 // Chapters, side menu, mobile top bar. Must run after the sections exist: it moves them into chapters.
 initNav();

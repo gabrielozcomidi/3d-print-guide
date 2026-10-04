@@ -30,81 +30,134 @@ const FAMILY_LABEL = Object.fromEntries(FAMILIES.map((f) => [f.id, f.label]));
 const SAFETY = { low: { label: "נמוך", n: 1 }, med: { label: "בינוני", n: 2 }, high: { label: "גבוה", n: 3 } };
 
 const techById = Object.fromEntries(technologies.map((t) => [t.id, t]));
-const colorOf = (m) => techById[m.techIds[0]].color; // a material takes the colour of its main technology
 const techNames = (m) => m.techIds.map((id) => techById[id].name);
 
-// One big radar for the whole section: when you pick another material its shape morphs instead of being redrawn.
-let bigRadar = null;
-function bigChart(m) {
-  const values = AXES.map((a) => m.ratings[a.key]);
-  if (!bigRadar) bigRadar = radar({ axes: AXES.map((a) => a.label), values, animateIn: true });
-  else bigRadar.update(values);
-  return bigRadar;
-}
+// Every material gets its own colour so several can be laid over each other in the radar.
+// The colour is its position inside its family (--m-1 ... --m-8, see tokens.css): materials are only
+// compared within one family, so the colours only need to differ there.
+const materialColor = (m) => `--m-${materials.filter((x) => x.family === m.family).indexOf(m) + 1}`;
+const colorOf = materialColor;
+const seriesOf = (m) => ({ id: m.id, name: m.name, color: materialColor(m), values: AXES.map((a) => m.ratings[a.key]) });
 
-/** Big radar + text for one material. */
-function buildDetail(m) {
+/** Text for one material: summary, safety, technologies, typical failures. */
+function buildText(m) {
   const failures = (m.failureRisk ?? []).map((id) => issues.find((i) => i.id === id)?.name).filter(Boolean);
   const safety = SAFETY[m.safety.level];
   return h(
     "div",
-    { class: "mat-detail", style: `--c: var(${colorOf(m)})` },
-    h("div", { class: "mat-detail__chart" }, bigChart(m)),
+    { class: "mat-detail__text", style: `--c: var(${materialColor(m)})` },
+    h("h3", { class: "mat-detail__name", html: bidi(m.name) }),
+    h("p", { html: bidi(m.summary) }),
     h(
       "div",
-      { class: "mat-detail__text" },
-      h("h3", { class: "mat-detail__name", html: bidi(m.name) }),
-      h("p", { html: bidi(m.summary) }),
-      h(
-        "div",
-        { class: "card", style: "--c: var(--accent)" }, // safety is not a technology: dots use ink, not a tech colour
-        h("h3", { class: "spec__title" }, "רמת זהירות בטיפול"),
-        h("p", { class: "spec__value" }, safety.label),
-        dotMeter(safety.n, 3, "רמת זהירות"),
-        h("p", { class: "spec__note", html: bidi(m.safety.notes) })
-      ),
-      h(
-        "div",
-        { class: "card" },
-        h("h3", { class: "spec__title" }, "מודפס בטכנולוגיות"),
-        h("p", { class: "mat-techs" }, m.techIds.map((id) => h("span", { class: "chip", style: `--c: var(${techById[id].color})`, html: bidi(techById[id].name) })))
-      ),
-      failures.length
-        ? h("div", { class: "card" }, h("h3", { class: "spec__title" }, "נוטה לתקלות"), markList(failures, "•"))
-        : null
-    )
+      { class: "card", style: "--c: var(--accent)" }, // safety is not a technology: dots use ink, not a tech colour
+      h("h3", { class: "spec__title" }, "רמת זהירות בטיפול"),
+      h("p", { class: "spec__value" }, safety.label),
+      dotMeter(safety.n, 3, "רמת זהירות"),
+      h("p", { class: "spec__note", html: bidi(m.safety.notes) })
+    ),
+    h(
+      "div",
+      { class: "card" },
+      h("h3", { class: "spec__title" }, "מודפס בטכנולוגיות"),
+      h("p", { class: "mat-techs" }, m.techIds.map((id) => h("span", { class: "chip", style: `--c: var(${techById[id].color})`, html: bidi(techById[id].name) })))
+    ),
+    failures.length ? h("div", { class: "card" }, h("h3", { class: "spec__title" }, "נוטה לתקלות"), markList(failures, "•")) : null
   );
 }
 
-/** Family picker + radar grid + detail. */
+/**
+ * Family picker + grid of small radars + one big radar.
+ * Tiles are toggles: pick one material, or several to lay them over each other in the big radar.
+ * The legend under the big radar says which colour is which; choosing a name there (or the material
+ * you picked last) decides whose details are shown next to the chart.
+ */
 function buildExplorer() {
   const grid = h("div", { class: "mat-grid" });
-  const detail = h("div", { class: "mat-detail-host", "aria-live": "polite" });
-  const panel = h("div", { id: "materials-panel", role: "tabpanel" }, grid, detail);
-  let family = null;
-  let tiles = [];
+  const hint = h("p", { class: "mat-hint" }, "אפשר לבחור כמה חומרים כדי להשוות ביניהם. אפשר לראות אותם זה על גבי זה, בצבעים שקופים, או כל אחד בנפרד.");
+  const chartHost = h("div", { class: "mat-detail__chart" });
+  const multi = h("div", { class: "mat-multi" }); // "side by side" view: one radar per chosen material
+  const textHost = h("div", { class: "mat-detail__host", "aria-live": "polite" });
+  const detail = h("div", { class: "mat-detail" }, h("div", { class: "mat-detail__left" }, chartHost), textHost);
+  // overlay: all chosen materials in one chart. separate: one chart each, next to each other.
+  let mode = "overlay";
+  const modePick = selector({
+    label: "אופן ההשוואה",
+    role: "radio",
+    className: "mat-mode",
+    items: [{ id: "overlay", label: "זה על גבי זה" }, { id: "separate", label: "זה לצד זה" }],
+    selected: mode,
+    onSelect: (id) => { mode = id; refresh(); },
+  });
+  const panel = h("div", { id: "materials-panel", role: "tabpanel" }, grid, hint, modePick.node, detail);
 
-  function selectMaterial(m) {
-    tiles.forEach((t) => t.button.setAttribute("aria-pressed", String(t.id === m.id)));
-    detail.replaceChildren(buildDetail(m));
+  let family = null;
+  let list = []; // materials of the current family
+  let picked = []; // ids, in the order they were picked
+  let focus = null; // id whose details are shown
+  let tiles = [];
+  let big = null; // the one big radar, kept so shapes morph instead of being redrawn
+  let legend = null;
+
+  function refresh() {
+    const chosen = picked.map((id) => list.find((m) => m.id === id));
+    tiles.forEach((t) => t.button.setAttribute("aria-pressed", String(picked.includes(t.id))));
+    const series = chosen.map(seriesOf);
+    if (!big) {
+      big = radar({ axes: AXES.map((a) => a.label), series, animateIn: true });
+      chartHost.prepend(big, multi);
+    } else big.update(series);
+
+    const separate = mode === "separate";
+    big.style.display = separate ? "none" : "";
+    multi.hidden = !separate;
+    detail.classList.toggle("mat-detail--separate", separate);
+    multi.replaceChildren(...(separate ? chosen.map((m) => h("figure", { class: "mat-multi__item", style: `--c: var(${materialColor(m)})` }, radar({ axes: AXES.map((a) => a.label), series: [seriesOf(m)] }), h("figcaption", { class: "mat-multi__name", html: bidi(m.name) }))) : []));
+
+    // legend: only worth showing when there is something to tell apart
+    legend?.node.remove();
+    legend = selector({
+      label: "החומרים בהשוואה: בחירה מציגה את הפרטים שלו",
+      role: "radio",
+      className: "mat-legend",
+      items: chosen.map((m) => ({ id: m.id, label: m.name, color: materialColor(m) })),
+      selected: focus,
+      onSelect: (id) => { focus = id; refresh(); },
+    });
+    chartHost.append(legend.node);
+    textHost.replaceChildren(buildText(list.find((m) => m.id === focus)));
+  }
+
+  function toggle(m) {
+    if (picked.includes(m.id)) {
+      if (picked.length === 1) return; // the chart always shows at least one material
+      picked = picked.filter((id) => id !== m.id);
+      if (focus === m.id) focus = picked[picked.length - 1];
+    } else {
+      picked.push(m.id);
+      focus = m.id;
+    }
+    refresh();
   }
 
   function showFamily(id) {
     if (family === id) return;
     family = id;
-    const list = materials.filter((m) => m.family === id);
+    list = materials.filter((m) => m.family === id);
     tiles = list.map((m) => {
       const button = h(
         "button",
-        { class: "mat-tile", type: "button", "aria-pressed": "false", style: `--c: var(${colorOf(m)})` },
-        radar({ axes: AXES.map((a) => a.label), values: AXES.map((a) => m.ratings[a.key]), labels: false }),
+        { class: "mat-tile", type: "button", "aria-pressed": "false", style: `--c: var(${materialColor(m)})` },
+        radar({ axes: AXES.map((a) => a.label), series: [seriesOf(m)], labels: false }),
         h("span", { class: "mat-tile__name", html: bidi(m.name) })
       );
-      button.addEventListener("click", () => selectMaterial(m));
+      button.addEventListener("click", () => toggle(m));
       return { id: m.id, button };
     });
     grid.replaceChildren(...tiles.map((t) => t.button));
-    selectMaterial(list[0]);
+    picked = [list[0].id];
+    focus = list[0].id;
+    refresh();
   }
 
   const tabs = selector({

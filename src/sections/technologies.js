@@ -9,6 +9,8 @@ import { diagramFrame } from "../lib/diagramFrame.js";
 import { dotMeter, layerRange } from "../lib/meters.js";
 import { gsap, prefersReducedMotion } from "../lib/reveal.js";
 import { selector } from "../lib/selector.js";
+import { link } from "../lib/router.js";
+import { flowArrow } from "../lib/arrow.js";
 import { markList } from "../lib/list.js";
 import { materials } from "../data/materials.js";
 import { technologies } from "../data/technologies.js";
@@ -54,7 +56,10 @@ export function buildPanel(tech) {
   const node = h(
     "div",
     { class: "tech-panel", style: `--c: var(${tech.color})` },
+    h("h3", { class: "tech-panel__name" }, h("span", { html: bidi(tech.name) }), tech.fullName ? h("small", { html: bidi(tech.fullName) }) : null), // which technology is on screen
     h("p", { class: "tech-panel__lead", html: bidi(tech.principle) }),
+    // FDM printers come in six motion systems: they have their own page
+    tech.id === "fdm" ? h("p", { class: "tech-panel__more" }, link("fdmtypes", { class: "next-btn" }, h("span", {}, "סוגי מדפסות FDM: מה זז ומה לא"), flowArrow())) : null,
     h(
       "div",
       { class: "tech-panel__top" },

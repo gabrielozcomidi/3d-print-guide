@@ -28,6 +28,19 @@
   --t-mjf: #a97600;
   --t-industrial: #7a6f6c;
 
+  /* One colour per material slot, for comparing materials in the radar. A material takes the colour of
+     its position inside its family (lib: materialColor in sections/materials.js), so the colours only
+     have to differ from each other within one family (the largest has 8 materials).
+     Same flat print set, each >= 3:1 on paper (checked by scripts/check-contrast.js). Red is left to the ink. */
+  --m-1: #2f62d9;
+  --m-2: #0b8a96;
+  --m-3: #2e8b57;
+  --m-4: #a97600;
+  --m-5: #7b3fc4;
+  --m-6: #b0348f;
+  --m-7: #6b7a00;
+  --m-8: #3f4f63;
+
   /* Shape + spacing (8px grid) */
   --radius: 4px;
   --rule: 1.5px;

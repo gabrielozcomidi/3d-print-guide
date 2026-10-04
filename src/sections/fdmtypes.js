@@ -5,6 +5,8 @@ import "../styles/fdmtypes.css";
 import { h } from "../lib/dom.js";
 import { bidi } from "../lib/bidi.js";
 import { sectionHeader } from "../lib/section.js";
+import { link } from "../lib/router.js";
+import { flowArrow } from "../lib/arrow.js";
 import { dotMeter } from "../lib/meters.js";
 import { selector } from "../lib/selector.js";
 import { markList } from "../lib/list.js";
@@ -140,6 +142,6 @@ export function render(el) {
     className: "tech-tabs",
   });
 
-  el.append(...sectionHeader("fdmtypes"), tabs.node, stage, buildTable());
+  el.append(...sectionHeader("fdmtypes"), h("p", { class: "fdm-back" }, link("technologies", { class: "next-btn" }, flowArrow(), h("span", {}, "חזרה להסבר על FDM/FFF"))), tabs.node, stage, buildTable());
   show(fdmTypes[0].id);
 }
