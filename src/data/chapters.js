@@ -13,6 +13,7 @@ export const chapters = [
   { id: "materials", title: "חומרים", sections: ["materials"] },
   { id: "fix", title: "תקלות ופתרונות", sections: ["troubleshooting"] },
   { id: "choose", title: "מה לבחור", sections: ["usecases", "wizard"] },
+  { id: "game", title: "משחק: יום הדפסה", sections: ["game"] },
 ];
 
 /** Task-based entry points shown on the home page: what people actually come here to do. */

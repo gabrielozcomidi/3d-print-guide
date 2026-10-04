@@ -1,0 +1,49 @@
+/* Print Day game: progress row and the stage every step screen is mounted into. Same language as the rest of
+   the site: outlines, hollow/filled circles, rules instead of boxes, logical properties only (RTL). */
+
+/* ---------- Progress: the six steps ---------- */
+.game-progress { list-style: none; margin: var(--space-4) 0 var(--space-6); padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
+.game-progress__item { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--text); }
+.game-progress__num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: var(--rule) solid var(--border);
+  border-radius: 50%;
+  font-size: 1rem;
+}
+.game-progress__item.is-done .game-progress__num,
+.game-progress__item[aria-current="step"] .game-progress__num { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.game-progress__item[aria-current="step"] .game-progress__title { color: var(--accent); text-decoration: underline wavy var(--accent) 2px; text-underline-offset: 0.3em; }
+@media (max-width: 600px) {
+  .game-progress__title { display: none; } /* numbers only on phones; the current step is named in the prompt */
+  .game-progress__item[aria-current="step"] .game-progress__title { display: inline; }
+}
+
+/* ---------- Stage ---------- */
+.game-stage { border-block: var(--rule) solid var(--border); padding-block: var(--space-6); display: grid; gap: var(--space-4); min-block-size: 18rem; align-content: start; }
+.game-stage__prompt { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.4rem, 1rem + 2vw, 2rem); line-height: 1.2; margin: 0; max-inline-size: none; text-align: start; }
+.game-stage__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+
+/* secondary button: outlined pill, same family as the menu button and .next-btn */
+.game-btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  min-block-size: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--accent);
+  padding: 0.6rem 1.2rem;
+  border: var(--rule) solid var(--border);
+  border-radius: 999px;
+}
+.game-btn:hover { background: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
+.game-btn:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+.game-btn:disabled, .next-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.game-stage .next-btn { min-block-size: 2.75rem; }
