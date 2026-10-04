@@ -20,7 +20,6 @@ import { patterns } from "../src/data/infill.js";
 import { stages, families } from "../src/data/workflow.js";
 import { slicers, featureColumns, licenseLabel } from "../src/data/slicers.js";
 import { artIds } from "../src/diagrams/workflow.js";
-import { steps as gameSteps, objects as gameObjects, slice as gameSlice, firstLayer as gameFirstLayer } from "../src/data/game.js";
 
 // Diagram ids that exist in src/diagrams/index.js (read from the registry file so we don't import browser code)
 const diagramsSrc = readFileSync(new URL("../src/diagrams/index.js", import.meta.url), "utf8");
@@ -212,47 +211,10 @@ for (const t of fdmTypes) {
   for (const key of ["pros", "cons"]) if (!t[key]?.length) fail(`${w}.${key}: needs at least one item`);
 }
 
-// Print Day game: every object is complete, spots are valid, a decoy exists, options are complete
-checkUnique(gameObjects, "game objects");
-const SHAPES = ["ellipsoid", "box", "cylinder", "cone", "frustum"];
-const isPoint = (p) => Array.isArray(p) && p.length === 3 && p.every(Number.isFinite);
-for (const o of gameObjects) {
-  const w = `game object ${o.id}`;
-  if (!o.name || !o.blurb || !o.finale) fail(`${w}: needs name, blurb and finale`);
-  if (!o.parts?.length) fail(`${w}: needs parts`);
-  const partIds = new Set();
-  for (const p of o.parts ?? []) {
-    if (partIds.has(p.id)) fail(`${w}: duplicate part id "${p.id}"`);
-    partIds.add(p.id);
-    if (!SHAPES.includes(p.shape)) fail(`${w}.parts.${p.id}: shape must be one of ${SHAPES.join("|")}`);
-    if (!isPoint(p.at) || !isPoint(p.size) || p.size.some((v) => v <= 0)) fail(`${w}.parts.${p.id}: at and size must be [x,y,z] numbers (size > 0)`);
-    if (p.at?.[1] < 0) fail(`${w}.parts.${p.id}: at.y below the bed`);
-  }
-  const top = Math.max(...(o.parts ?? []).map((p) => p.at[1] + p.size[1]));
-  if (top > 100) fail(`${w}: taller than 100 units (${top})`);
-  if (!isPoint(o.hole?.at) || !o.hole?.where) fail(`${w}.hole: needs at [x,y,z] and where`);
-  const spots = o.supports ?? [];
-  checkUnique(spots, `${w}.supports`);
-  if (spots.some((s) => !isPoint(s.at) || !s.label || !s.why || typeof s.needs !== "boolean")) fail(`${w}.supports: each needs at, label, why and needs (true|false)`);
-  if (!spots.some((s) => s.needs)) fail(`${w}.supports: needs at least one real overhang`);
-  if (!spots.some((s) => !s.needs)) fail(`${w}.supports: needs at least one decoy (needs: false)`);
-}
-if (gameSteps.length !== 6) fail("game: expected 6 steps");
-for (const [group, list] of [["layerHeights", gameSlice.layerHeights], ["infills", gameSlice.infills]]) {
-  checkUnique(list, `game slice.${group}`);
-  if (list.length !== 3 || list.some((x) => !x.label || !x.line)) fail(`game slice.${group}: needs 3 options with label and line`);
-}
-for (const l of gameSlice.layerHeights) for (const k of ["time", "finish"]) if (![1, 2, 3].includes(l[k])) fail(`game layer ${l.id}.${k}: must be 1-3`);
-for (const l of gameSlice.layerHeights) if (!Number.isInteger(l.layers) || l.layers < 10 || l.layers > 200) fail(`game layer ${l.id}.layers: whole number 10-200`);
-for (const i of gameSlice.infills) for (const k of ["strength", "material"]) if (![1, 2, 3].includes(i[k])) fail(`game infill ${i.id}.${k}: must be 1-3`);
-if (gameFirstLayer.heights.filter((x) => x.result === "ok").length !== 1) fail("game firstLayer: exactly one height must have result ok");
-for (const x of gameFirstLayer.heights) if (x.result !== "ok" && (!x.fail || !x.hint)) fail(`game firstLayer.${x.id}: failed heights need fail and hint`);
-if (/\$|₪|price|מחיר/i.test(JSON.stringify([gameObjects, gameSlice, gameFirstLayer]))) fail("game: no prices on this site");
-
 if (errors.length) {
   console.error(`\nData validation failed (${errors.length}):\n` + errors.map((e) => "  - " + e).join("\n") + "\n");
   process.exit(1);
 }
 console.log(
-  `Data OK: ${technologies.length} technologies, ${materials.length} materials, ${issues.length} issues, ${useCases.length} use cases, ${fdmTypes.length} FDM types, ${gameObjects.length} game objects.`
+  `Data OK: ${technologies.length} technologies, ${materials.length} materials, ${issues.length} issues, ${useCases.length} use cases, ${fdmTypes.length} FDM types.`
 );

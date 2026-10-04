@@ -4,8 +4,6 @@
 //
 // "hero" has no menu entry of its own: it is the top of the first chapter.
 
-import { links as gameLinks } from "./game.js";
-
 export const chapters = [
   { id: "start", title: "מתחילים", sections: ["hero", "overview"] },
   { id: "machines", title: "סוגי מדפסות", sections: ["technologies", "industrial", "compare"] },
@@ -15,7 +13,6 @@ export const chapters = [
   { id: "materials", title: "חומרים", sections: ["materials"] },
   { id: "fix", title: "תקלות ופתרונות", sections: ["troubleshooting"] },
   { id: "choose", title: "מה לבחור", sections: ["usecases", "wizard"] },
-  { id: "game", title: "יום הדפסה", sections: ["game"] },
 ];
 
 /** Task-based entry points shown on the home page: what people actually come here to do. */
@@ -24,5 +21,4 @@ export const startPaths = [
   { label: "איזו טכנולוגיה וחומר מתאימים לי?", target: "wizard" },
   { label: "איך מכינים דגם להדפסה?", target: "workflow" },
   { label: "ההדפסה נכשלה. מה עושים?", target: "troubleshooting" },
-  { label: gameLinks.startLabel, target: "game" },
 ];

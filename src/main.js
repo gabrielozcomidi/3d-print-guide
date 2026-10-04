@@ -23,13 +23,12 @@ import { render as materials } from "./sections/materials.js";
 import { render as troubleshooting } from "./sections/troubleshooting.js";
 import { render as usecases } from "./sections/usecases.js";
 import { render as wizard } from "./sections/wizard.js";
-import { render as game } from "./sections/game.js";
 
 // Tells CSS that JS is running, so [data-reveal] elements may start hidden (see base.css).
 document.documentElement.classList.add("js");
 
 // id in index.html -> render function. (Which chapter each section belongs to: data/chapters.js)
-const renderers = { hero, overview, workflow, technologies, fdmtypes, supports, infill, industrial, compare, materials, troubleshooting, usecases, wizard, game };
+const renderers = { hero, overview, workflow, technologies, fdmtypes, supports, infill, industrial, compare, materials, troubleshooting, usecases, wizard };
 for (const [id, render] of Object.entries(renderers)) {
   render(document.getElementById(id));
 }

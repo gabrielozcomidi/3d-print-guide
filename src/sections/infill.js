@@ -12,9 +12,6 @@ import { dotMeter } from "../lib/meters.js";
 import { markList } from "../lib/list.js";
 import { callsIt } from "../lib/callsit.js";
 import { createInfill } from "../diagrams/infillDemo.js";
-import { link } from "../lib/router.js";
-import { flowArrow } from "../lib/arrow.js";
-import { links as gameLinks } from "../data/game.js";
 import { patterns, infillGuide, infillNotes, wallsNote, resinNote } from "../data/infill.js";
 
 const RATING_LABEL = { strength: "חוזק", speed: "מהירות הדפסה", material: "חיסכון בחומר", top: "תמיכה למשטח העליון" };
@@ -102,9 +99,7 @@ export function render(el) {
     ),
     guide,
     h("p", { class: "spec__note infill-notes", html: bidi(infillNotes.join(" ")) }),
-    h("div", { class: "infill-extras" }, h("h3", {}, "הקירות חשובים לא פחות"), h("p", { html: bidi(wallsNote) }), h("h3", {}, "ובשרף?"), h("p", { html: bidi(resinNote) })),
-    // the end of the printing chapter: try it for real
-    h("p", { class: "infill-game" }, link("game", { class: "next-btn" }, h("span", {}, gameLinks.chapterLink), flowArrow()))
+    h("div", { class: "infill-extras" }, h("h3", {}, "הקירות חשובים לא פחות"), h("p", { html: bidi(wallsNote) }), h("h3", {}, "ובשרף?"), h("p", { html: bidi(resinNote) }))
   );
   showInfo();
   apply(true);

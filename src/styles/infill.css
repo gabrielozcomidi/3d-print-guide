@@ -25,5 +25,3 @@
 @media (max-width: 820px) {
   .infill-stage { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
 }
-
-.infill-game { margin-block-start: var(--space-8); }
