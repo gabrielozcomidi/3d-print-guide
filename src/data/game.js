@@ -137,9 +137,17 @@ export const firstLayer = {
 
 // ---- Step 6: finish ----
 export const finish = {
-  prompt: "ההדפסה הסתיימה. הסירו את התמיכות.",
-  removed: "התמיכות הוסרו. נשארים עליהן סימנים קטנים, ולכן לפעמים משייפים.",
+  prompt: "ההדפסה הסתיימה. הסירו את התמיכות: הקישו על כל אחת.",
+  removeLeft: (n) => `נשארו ${n} תמיכות להסרה.`,
+  removed: "התמיכות הוסרו. נשארים במקומן סימנים קטנים, ולכן לפעמים משייפים. והנה מה שהדפסתם:",
+  rotate: "סובבו את הדגם",
   summary: (layerLabel, infillLabel) => `הדפסתם בעובי שכבה ${layerLabel} ובמילוי ${infillLabel}.`,
   again: "משחק חדש",
   another: "דגם אחר",
+};
+
+// ---- Where the game is linked from (the home page uses startLabel, the printing chapter uses chapterLink) ----
+export const links = {
+  startLabel: "רוצים לנסות? משחק יום הדפסה",
+  chapterLink: "נסו בעצמכם: משחק יום הדפסה",
 };

@@ -176,7 +176,7 @@ export function createFinale(canvas, obj, { layers: N }) {
     drawBed();
     const whole = Math.floor(progress);
     for (let i = 0; i < Math.min(whole, N); i++) drawLayer(i);
-    if (whole < N && progress > whole) {
+    if (whole >= 0 && whole < N && progress > whole) {
       // the layer being printed: revealed up to the nozzle, which sweeps back and forth
       const within = progress - whole;
       const reach = R * 1.1 * S;
@@ -195,7 +195,7 @@ export function createFinale(canvas, obj, { layers: N }) {
 
   function frame(now) {
     raf = requestAnimationFrame(frame);
-    const dt = Math.min(0.05, (now - last) / 1000);
+    const dt = Math.max(0, Math.min(0.05, (now - last) / 1000)); // never negative: the first rAF timestamp can be a hair before `last`
     last = now;
     if (!visible) return;
     if (printState) {

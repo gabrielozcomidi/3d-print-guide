@@ -171,6 +171,15 @@ export function createFigure() {
       nozzle?.remove();
       nozzle = null;
     },
+    /** take a support away (step 6) */
+    removeSupport(id) {
+      supports.querySelector(`[data-spot="${id}"]`)?.remove();
+    },
+    /** a small mark where a support was: removing supports leaves scars */
+    addScar(spot) {
+      const [x, y] = spot.at;
+      supports.append(svgEl("circle", { class: "fig-scar", cx: x, cy: -y, r: 1.3 }));
+    },
     clearOverlay() {
       overlay.replaceChildren();
       nozzle = null;

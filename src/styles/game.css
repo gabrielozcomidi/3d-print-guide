@@ -92,6 +92,16 @@
 .fig-nozzle line { fill: none; }
 .selector[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
 
+/* ---------- Finish: the finale canvas takes the figure's place ---------- */
+.game-figure-wrap.is-finale { position: static; max-inline-size: 24rem; padding-block: 0; border-block-end: 0; }
+.game-canvas { display: block; inline-size: 100%; aspect-ratio: 1 / 1; }
+.fig-scar { fill: var(--accent); }
+.game-finish { display: grid; gap: var(--space-3); margin-block-start: var(--space-2); }
+.game-finish[hidden] { display: none; }
+.game-finish__rotate { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-display); font-weight: 800; }
+.game-finish__rotate input { flex: 1; accent-color: var(--accent); block-size: 1.5rem; cursor: pointer; }
+.game-finish__rotate input:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+
 /* ---------- Buttons ---------- */
 /* secondary button: outlined pill, same family as the menu button and .next-btn */
 .game-btn {

@@ -14,7 +14,7 @@ import * as repairStep from "../lib/game/steps/repair.js";
 import * as sliceStep from "../lib/game/steps/slice.js";
 import * as supportsScreen from "../lib/game/steps/supports.js";
 import * as firstLayerStep from "../lib/game/steps/firstLayer.js";
-import * as placeholder from "../lib/game/steps/placeholder.js";
+import * as finishStep from "../lib/game/steps/finish.js";
 
 // step id -> its screen and its prompt. firstLayer and finish are built in later tasks.
 const SCREENS = {
@@ -23,10 +23,10 @@ const SCREENS = {
   slice: { screen: sliceStep, prompt: slice.prompt },
   supports: { screen: supportsScreen, prompt: supportsStep.prompt },
   firstLayer: { screen: firstLayerStep, prompt: firstLayer.prompt },
-  finish: { screen: placeholder, prompt: finish.prompt },
+  finish: { screen: finishStep, prompt: finish.prompt },
 };
 
-const freshState = () => ({ objectId: null, repaired: false, layerId: null, infillId: null, found: [], printed: false, done: {} });
+const freshState = () => ({ objectId: null, repaired: false, layerId: null, infillId: null, found: [], printed: false, removed: [], finished: false, done: {} });
 
 /** @param {HTMLElement} el the <section id="game"> element */
 export function render(el) {
@@ -49,7 +49,8 @@ export function render(el) {
   back.addEventListener("click", () => game.back());
   next.addEventListener("click", () => game.next());
   const panel = h("div", { class: "game-panel" }, prompt, body, feedback, h("div", { class: "game-stage__actions" }, back, next));
-  const stage = h("div", { class: "game-stage" }, h("div", { class: "game-figure-wrap" }, figure.svg), panel);
+  const wrap = h("div", { class: "game-figure-wrap" }, figure.svg);
+  const stage = h("div", { class: "game-stage" }, wrap, panel);
 
   /** what a step may do: see lib/game/steps/*.js */
   const ctx = {
@@ -61,6 +62,22 @@ export function render(el) {
     complete() {
       state.done[game.id] = true;
       refreshNav();
+    },
+    /** swap the drawing for a canvas (the finale); release() puts the drawing back */
+    useCanvas(label) {
+      const canvas = h("canvas", { class: "game-canvas", role: "img", "aria-label": label });
+      figure.svg.style.display = "none";
+      wrap.classList.add("is-finale");
+      wrap.append(canvas);
+      return { canvas, release() { canvas.remove(); figure.svg.style.display = ""; wrap.classList.remove("is-finale"); } };
+    },
+    /** start over; keepObject: same object, otherwise choose again */
+    restart(keepObject) {
+      const id = keepObject ? state.objectId : null;
+      Object.assign(state, freshState(), { objectId: id });
+      if (id) state.done.choose = true;
+      figure.setObject(id ? ctx.object() : null);
+      game.restart();
     },
     setObject(id) {
       if (id === state.objectId) return;

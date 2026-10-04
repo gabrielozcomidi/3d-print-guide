@@ -4,6 +4,8 @@
 //
 // "hero" has no menu entry of its own: it is the top of the first chapter.
 
+import { links as gameLinks } from "./game.js";
+
 export const chapters = [
   { id: "start", title: "מתחילים", sections: ["hero", "overview"] },
   { id: "machines", title: "סוגי מדפסות", sections: ["technologies", "industrial", "compare"] },
@@ -22,4 +24,5 @@ export const startPaths = [
   { label: "איזו טכנולוגיה וחומר מתאימים לי?", target: "wizard" },
   { label: "איך מכינים דגם להדפסה?", target: "workflow" },
   { label: "ההדפסה נכשלה. מה עושים?", target: "troubleshooting" },
+  { label: gameLinks.startLabel, target: "game" },
 ];
