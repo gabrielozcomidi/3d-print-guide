@@ -113,5 +113,6 @@ export function render(el) {
   tl.add(printLoop(art));
 
   // Looping diagrams pause when off-screen (the other chapters hide the hero, which counts as off-screen).
+  // Looping diagrams pause when off-screen. The visitor's own pause lives in the accessibility menu (lib/a11y.js).
   new IntersectionObserver(([e]) => (e.isIntersecting ? tl.play() : tl.pause()), { threshold: 0.1 }).observe(svg);
 }

@@ -86,7 +86,7 @@ export function radar({ axes, series, labels = true, animateIn = false }) {
   let latest = series; // what the chart should show; a pick made before the chart is visible is not lost
   svg.update = (list, { duration = 0.7 } = {}) => {
     latest = list;
-    svg.setAttribute("aria-label", describe(list));
+    svg.setAttribute("aria-label", list.length ? describe(list) : "תרשים מכ״ם להשוואת חומרים");
     showValues(list);
     const instant = prefersReducedMotion();
     const keep = new Set(list.map((s) => s.id));

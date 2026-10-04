@@ -14,7 +14,7 @@
 /* ---------- Grid of small radars ---------- */
 .mat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(8.5rem, 100%), 1fr));
   gap: var(--space-4) var(--space-2);
   margin-block: var(--space-4) var(--space-8);
 }
@@ -51,7 +51,7 @@
 /* side by side: the chart column spans the whole row and holds a wrapping grid of radars */
 .mat-detail--separate { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
 .mat-detail--separate .mat-detail__chart { max-inline-size: none; }
-.mat-multi { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: var(--space-6) var(--space-4); }
+.mat-multi { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr)); gap: var(--space-6) var(--space-4); }
 .mat-multi[hidden] { display: none; }
 .mat-multi__item { margin: 0; display: grid; gap: var(--space-1); justify-items: center; }
 .mat-multi__name { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; }

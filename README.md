@@ -55,6 +55,14 @@ Red ink on blush paper, hand-drawn line art, justified serif text, heavy display
 - **Motion:** respects `prefers-reduced-motion`. With it on, every animation shows its finished state and the page does not scroll smoothly.
 - **Dev reference page:** open `/design.html` while running `npm run dev` to see colours and type. It is not part of the build.
 
+## Accessibility and legal pages
+
+- **Accessibility menu** (the "נגישות" button in the corner, `src/lib/a11y.js` and `src/styles/a11y.css`): text size, high contrast, grayscale, highlighted links, readable font, text spacing, large cursor, strong focus ring, and pause animations (a real pause and resume for every animation on the site, including the home-page drawing). The choices are kept only in the visitor's browser.
+- **Three pages**, linked from the footer and the menu: accessibility statement, privacy policy, terms of use (`src/sections/legal.js`; all wording is in `src/data/legal.js`). They are hidden chapters: reachable by `#accessibility`, `#privacy`, `#terms`, but not in the lesson menu.
+- **Before publishing**: fill in the `owner` block in `src/data/legal.js` (operator name, contact and accessibility contact details, hosting) and run `npm run check:legal`. It fails while anything is missing. `npm run validate` only warns.
+- **These texts are a template, not legal advice.** Have them reviewed by a lawyer. The statement says the site was checked by us, not externally: after a certified accessibility specialist audits the site, set `owner.audit` to `"external"` and fill `owner.auditDate`.
+- **When you change the site**, re-check accessibility: `npm run validate` (includes the contrast checks for normal and high-contrast mode), keyboard-only use, text at 150% and 200%, a screen reader, and update `owner.statementDate`.
+
 ## Hosting
 
 `dist/` is plain static files with relative URLs. Upload the folder to any static host or your own server.

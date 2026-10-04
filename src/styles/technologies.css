@@ -21,7 +21,7 @@
 }
 
 /* ---------- Panel ---------- */
-.tech-panel__name { display: flex; align-items: center; gap: 0.6rem; font-size: clamp(1.8rem, 1.2rem + 2.5vw, 2.75rem); font-weight: 900; line-height: 1.05; margin-block-end: var(--space-2); }
+.tech-panel__name { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.6rem; font-size: clamp(1.8rem, 1.2rem + 2.5vw, 2.75rem); font-weight: 900; line-height: 1.05; margin-block-end: var(--space-2); }
 .tech-panel__name small { font-family: var(--font-body); font-weight: 400; font-size: 1rem; color: var(--text-dim); }
 .tech-panel__name::before { content: ""; flex: none; inline-size: 1rem; block-size: 1rem; border-radius: 50%; background: var(--c); }
 .tech-panel__lead { font-size: 1.25em; line-height: 1.6; margin-block-end: var(--space-6); }
@@ -143,7 +143,7 @@
 /* ---------- Spec blocks: a rule on top, no box ---------- */
 .specs {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
   gap: var(--space-4) var(--space-6);
   margin-block-end: var(--space-6);
 }
@@ -158,7 +158,7 @@
 .range__ends { display: flex; justify-content: space-between; font-size: 0.85rem; margin-block-start: 0.3rem; }
 
 /* ---------- Pros / cons / post-processing ---------- */
-.tech-panel__lists { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: var(--space-4) var(--space-6); }
+.tech-panel__lists { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); gap: var(--space-4) var(--space-6); }
 .list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
 .list li { display: grid; grid-template-columns: 1.4rem 1fr; column-gap: 0.4rem; line-height: 1.5; }
 .list li::before { content: attr(data-mark); font-family: var(--font-display); font-weight: 900; color: var(--accent); }

@@ -13,6 +13,10 @@ export const chapters = [
   { id: "materials", title: "חומרים", sections: ["materials"] },
   { id: "fix", title: "תקלות ופתרונות", sections: ["troubleshooting"] },
   { id: "choose", title: "מה לבחור", sections: ["usecases", "wizard"] },
+  // legal pages: `hidden` chapters are not in the menu or the "next chapter" links; the footer links to them
+  { id: "accessibility", title: "הצהרת נגישות", sections: ["accessibility"], hidden: true },
+  { id: "privacy", title: "מדיניות פרטיות", sections: ["privacy"], hidden: true },
+  { id: "terms", title: "תנאי שימוש", sections: ["terms"], hidden: true },
 ];
 
 /** Task-based entry points shown on the home page: what people actually come here to do. */

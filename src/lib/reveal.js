@@ -11,7 +11,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 /** True when the user asked the OS/browser for less motion. Checked per call (it can change). */
-export const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/** True when the OS asks for less motion OR the visitor switched animations off in the accessibility menu (class set by lib/a11y.js). */
+export const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.classList.contains("a11y-motion");
 
 /** Page direction. Used to flip signed horizontal offsets; we avoid horizontal scrolling entirely. */
 export const isRTL = () => document.documentElement.dir === "rtl";

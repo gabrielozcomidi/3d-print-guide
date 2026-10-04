@@ -8,7 +8,7 @@ export function sectionHeader(id) {
   const info = sections.find((s) => s.id === id);
   return [
     h("h2", { html: bidi(info.title) }),
-    h("p", { class: "section__intro", html: bidi(info.intro) }),
+    info.intro ? h("p", { class: "section__intro", html: bidi(info.intro) }) : null,
   ];
 }
 

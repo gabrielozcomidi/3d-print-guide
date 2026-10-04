@@ -15,6 +15,8 @@
 .pair__material { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
 .pair--big .chip { font-size: 1.6rem; }
 .pair--big .pair__material { font-size: clamp(2rem, 1.2rem + 3.5vw, 3.5rem); line-height: 1.05; font-weight: 900; }
+.pair__material, .pair__material bdi.nw { overflow-wrap: anywhere; } /* a long material name may break rather than run off the screen at large text sizes */
+.pair--big .pair__material bdi.nw { white-space: normal; }
 .pair--big .chip::before { inline-size: 1.05rem; block-size: 1.05rem; }
 
 .result__actions { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }

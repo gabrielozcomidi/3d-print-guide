@@ -1,0 +1,129 @@
+/* Accessibility menu and the display modes it switches (classes on <html>, set by lib/a11y.js).
+   Everything here is visible only when a mode is on, except the button and panel. */
+
+/* ---------- Button and panel ---------- */
+.a11y-toggle {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: fixed;
+  inset-block-end: var(--space-2);
+  inset-inline-end: var(--space-2); /* the left corner in Hebrew: the side menu is on the right */
+  z-index: 55; /* under the full-screen phone menu (60) */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  padding: 0.35rem 1rem 0.35rem 0.8rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--accent);
+  background: var(--bg);
+  border: var(--rule) solid var(--border);
+  border-radius: 999px;
+}
+.a11y-toggle:hover { background: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
+.a11y-toggle:focus-visible, .a11y-panel button:focus-visible, .a11y-link:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+.a11y-icon { inline-size: 1.7rem; block-size: 1.7rem; flex: none; }
+.a11y-icon * { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.a11y-icon .a11y-icon__fill { fill: currentColor; }
+
+.a11y-panel {
+  position: fixed;
+  inset-block-end: calc(var(--space-2) + 3.5rem);
+  inset-inline-end: var(--space-2);
+  z-index: 55;
+  inline-size: min(21rem, calc(100vw - 2 * var(--space-2)));
+  max-block-size: calc(100vh - 7rem);
+  overflow-y: auto;
+  padding: var(--space-3);
+  background: var(--bg);
+  border: var(--rule) solid var(--border);
+  border-radius: var(--radius);
+  display: grid;
+  gap: var(--space-2);
+}
+.a11y-panel[hidden] { display: none; }
+.a11y-panel:focus { outline: none; } /* focus lands here only so the dialog is announced; the controls inside have their own rings */
+.a11y-panel__title { font-size: 1.5rem; margin: 0; }
+.a11y-size { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.a11y-size__value { font-family: var(--font-display); font-weight: 800; color: var(--text); }
+.a11y-btn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  min-block-size: 2.75rem;
+  min-inline-size: 2.75rem;
+  display: inline-grid;
+  place-items: center;
+  padding-inline: 1rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--accent);
+  border: var(--rule) solid var(--border);
+  border-radius: 999px;
+}
+.a11y-btn:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 12%, var(--bg)); }
+.a11y-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.a11y-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem var(--space-2); }
+.a11y-opt {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  min-block-size: 2.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: var(--text);
+}
+.a11y-opt__mark { flex: none; inline-size: 0.9rem; block-size: 0.9rem; border: 2.5px solid var(--accent); border-radius: 50%; } /* hollow = off, filled = on */
+.a11y-opt[aria-pressed="true"] .a11y-opt__mark { background: var(--accent); }
+.a11y-opt[aria-pressed="true"] > span:last-child { text-decoration: underline wavy var(--accent) 2px; text-underline-offset: 0.3em; }
+.a11y-panel__actions { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.a11y-link { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
+@media (max-width: 420px) { .a11y-opts { grid-template-columns: 1fr; } }
+
+/* ---------- Modes ---------- */
+/* high contrast: bright ink on black. Same token names, so every drawing and diagram follows.
+   (Each value is checked against the black by scripts/check-contrast.js.) */
+html.a11y-contrast {
+  --bg: #000000;
+  --surface-2: #151515;
+  --text: #ffffff;
+  --text-dim: #ffffff;
+  --accent: #ffd400;
+  --border: #ffd400;
+  --on-accent: #000000;
+  --t-fdm: #7aa8ff;
+  --t-sla: #c9a6ff;
+  --t-msla: #3fe3f0;
+  --t-sls: #5fe39a;
+  --t-mjf: #ffbf47;
+  --t-industrial: #c7c0be;
+  --m-1: #7aa8ff;
+  --m-2: #3fe3f0;
+  --m-3: #5fe39a;
+  --m-4: #ffbf47;
+  --m-5: #c9a6ff;
+  --m-6: #ff7ad1;
+  --m-7: #c5e04a;
+  --m-8: #9fb6cc;
+  color-scheme: dark;
+}
+html.a11y-gray { filter: grayscale(1); }
+html.a11y-links a, html.a11y-links .link-btn { text-decoration: underline solid 2px !important; text-underline-offset: 0.2em !important; outline: 2px dashed var(--accent); outline-offset: 2px; }
+html.a11y-font, html.a11y-font * { font-family: Arial, "Heebo Variable", sans-serif !important; }
+html.a11y-spacing :where(p, li, dd, dt, td, th, label, button, a, .selector__item) { line-height: 1.9 !important; letter-spacing: 0.05em !important; word-spacing: 0.16em !important; }
+html.a11y-cursor, html.a11y-cursor * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24'%3E%3Cpath d='M3 2 L3 19 L8 14.5 L11.5 22 L14.5 20.5 L11 13.5 L18 13.5 Z' fill='%23000' stroke='%23fff' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") 4 2, auto !important; }
+html.a11y-focus :focus-visible { outline: 4px solid #ffbf00 !important; outline-offset: 3px !important; box-shadow: 0 0 0 8px #000 !important; }
+html.a11y-motion *, html.a11y-motion *::before, html.a11y-motion *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+
+/* footer links to the legal pages */
+.footer-links { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin-block-start: var(--space-2); }
+.footer-links a { font-family: var(--font-display); font-weight: 800; min-block-size: 2.75rem; display: inline-flex; align-items: center; }

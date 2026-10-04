@@ -22,7 +22,7 @@
 
 /* G-code sample: code is always left-to-right; each line has its meaning next to it */
 .gcode, .formats { margin: 0; display: grid; gap: var(--space-1); }
-.gcode > div, .formats > div { display: grid; grid-template-columns: minmax(8rem, 13rem) minmax(0, 1fr); gap: var(--space-2); align-items: baseline; padding-block: 0.35rem; border-block-start: 1px dashed var(--border); }
+.gcode > div, .formats > div { display: grid; grid-template-columns: minmax(min(8rem, 40%), 13rem) minmax(0, 1fr); gap: var(--space-2); align-items: baseline; padding-block: 0.35rem; border-block-start: 1px dashed var(--border); }
 .gcode dt { font-family: ui-monospace, Consolas, "Courier New", monospace; font-size: 0.95rem; font-weight: 600; text-align: left; }
 .gcode dd, .formats dd { margin: 0; }
 .formats dt { font-family: var(--font-display); font-weight: 800; color: var(--accent); }
@@ -41,7 +41,7 @@
 
 .slicer-table table { min-inline-size: 48rem; }
 
-.slicer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: var(--space-4) var(--space-6); }
+.slicer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr)); gap: var(--space-4) var(--space-6); }
 .slicer { display: grid; gap: var(--space-1); align-content: start; }
 .slicer__name { font-size: 1.6rem; font-weight: 900; margin: 0; }
 .slicer p { margin: 0; }

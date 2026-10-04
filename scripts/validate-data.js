@@ -20,6 +20,7 @@ import { patterns } from "../src/data/infill.js";
 import { stages, families } from "../src/data/workflow.js";
 import { slicers, featureColumns, licenseLabel } from "../src/data/slicers.js";
 import { artIds } from "../src/diagrams/workflow.js";
+import { owner as legalOwner } from "../src/data/legal.js";
 
 // Diagram ids that exist in src/diagrams/index.js (read from the registry file so we don't import browser code)
 const diagramsSrc = readFileSync(new URL("../src/diagrams/index.js", import.meta.url), "utf8");
@@ -215,6 +216,8 @@ if (errors.length) {
   console.error(`\nData validation failed (${errors.length}):\n` + errors.map((e) => "  - " + e).join("\n") + "\n");
   process.exit(1);
 }
+const missingLegal = ["operatorName", "contactEmail", "coordinatorName", "coordinatorEmail", "coordinatorPhone", "hosting"].filter((k) => !String(legalOwner[k] ?? "").trim());
+if (missingLegal.length) console.warn(`\n! Legal details still missing in src/data/legal.js: ${missingLegal.join(", ")}. Fill them in and run "npm run check:legal" before publishing.\n`);
 console.log(
   `Data OK: ${technologies.length} technologies, ${materials.length} materials, ${issues.length} issues, ${useCases.length} use cases, ${fdmTypes.length} FDM types.`
 );

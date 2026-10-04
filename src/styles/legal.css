@@ -1,0 +1,12 @@
+/* Legal pages: plain reading pages. Same type and rules as the rest; no decoration. */
+.legal__block { margin-block-start: var(--space-6); border-block-start: var(--rule) solid var(--border); padding-block-start: var(--space-3); }
+.legal__block h3 { font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem); margin-block-end: var(--space-2); }
+.legal__list { margin: 0 0 var(--space-2); padding-inline-start: 1.25rem; max-inline-size: var(--measure); }
+.legal__list li { margin-block-end: 0.5rem; }
+.legal__contact { margin: var(--space-2) 0 0; display: grid; gap: 0.5rem; max-inline-size: var(--measure); }
+.legal__contact > div { display: flex; flex-wrap: wrap; gap: 0.25rem var(--space-2); }
+.legal__contact dt { font-family: var(--font-display); font-weight: 800; min-inline-size: 9rem; }
+.legal__contact dd { margin: 0; }
+.legal__updated { margin-block-start: var(--space-6); font-size: var(--fs-small); }
+/* a missing owner detail is loud on purpose: npm run check:legal blocks publishing while any exist */
+.legal__missing { background: var(--accent); color: var(--on-accent); padding: 0 0.4rem; border-radius: var(--radius); }

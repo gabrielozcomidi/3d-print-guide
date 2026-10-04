@@ -6,7 +6,7 @@
 .recos { margin-block-end: var(--space-6); }
 .reco {
   display: grid;
-  grid-template-columns: minmax(9rem, 12rem) 2.75rem minmax(0, 1fr);
+  grid-template-columns: minmax(min(9rem, 35%), 12rem) 2.75rem minmax(0, 1fr);
   align-items: center;
   column-gap: var(--space-2);
   padding-block: var(--space-2);

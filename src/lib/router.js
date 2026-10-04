@@ -27,6 +27,8 @@ import { sections as sectionInfo } from "../data/copy.js";
 const labelOf = (sectionId) => sectionInfo.find((s) => s.id === sectionId)?.nav;
 const chapterOfSection = (sectionId) => chapters.find((c) => c.sections.includes(sectionId));
 const chapterById = (id) => chapters.find((c) => c.id === id);
+/** The chapters shown in the menu and the "next chapter" links (legal pages are `hidden`). */
+const navChapters = chapters.filter((c) => !c.hidden);
 
 /** Sections with a menu label (the hero has none). */
 const menuSections = (chapter) => chapter.sections.filter((id) => labelOf(id));
@@ -54,7 +56,7 @@ function show(chapterId, sectionId, { initial = false } = {}) {
   state.chapterId = chapterId;
 
   for (const c of chapters) chapterEls[c.id].hidden = c.id !== chapterId;
-  const index = chapters.indexOf(chapter);
+  const index = navChapters.indexOf(chapter); // -1 for a legal page
 
   // menu state: the current chapter is marked and its sections are open (others close, to keep the menu calm)
   document.querySelectorAll("[data-nav-chapter]").forEach((a) => a.setAttribute("aria-current", String(a.dataset.navChapter === chapterId)));
@@ -65,7 +67,7 @@ function show(chapterId, sectionId, { initial = false } = {}) {
     syncToc();
   }
   const bar = document.querySelector(".site-nav__title");
-  if (bar) bar.replaceChildren(`${chapter.title} `, h("span", { class: "nw" }, `(${index + 1} מתוך ${chapters.length})`)); // the count never splits across lines
+  if (bar) bar.replaceChildren(chapter.title, ...(index >= 0 ? [" ", h("span", { class: "nw" }, `(${index + 1} מתוך ${navChapters.length})`)] : [])); // the count never splits across lines
   document.title = `${chapter.title} | מדריך חזותי להדפסת תלת־ממד`;
 
   // jump to the right place
@@ -138,7 +140,7 @@ function buildToc(prefix, { closeMenu } = {}) {
   return h(
     "ol",
     { class: "toc" },
-    chapters.map((c, i) => {
+    navChapters.map((c, i) => {
       const subs = menuSections(c);
       const hasSubs = subs.length > 1;
       const listId = `${prefix}-sections-${c.id}`;
@@ -178,15 +180,18 @@ function buildChapters(main) {
       el.prepend(h("nav", { class: "chapter-jump", "aria-label": "בפרק הזה" }, subs.map((s) => link(s, {}, labelOf(s)))));
     }
 
-    // end of chapter: where to go next
-    const next = chapters[i + 1];
+    // every page needs an <h1>: chapters without one (the home page has its own) get a hidden one with the chapter name
+    if (!el.querySelector("h1")) el.prepend(h("h1", { class: "sr-only" }, c.title));
+
+    // end of chapter: where to go next (legal pages just lead back to the start)
+    const next = c.hidden ? null : navChapters[navChapters.indexOf(c) + 1];
     el.append(
       h(
         "nav",
         { class: "chapter-next", "aria-label": "המשך" },
         next
           ? link(next.id, { class: "chapter-next__link" }, h("span", { class: "chapter-next__small" }, "הפרק הבא"), h("span", { class: "chapter-next__title", html: bidi(next.title) }), flowArrow())
-          : link(chapters[0].id, { class: "chapter-next__link" }, h("span", { class: "chapter-next__small" }, "סיימתם"), h("span", { class: "chapter-next__title" }, "חזרה להתחלה"), flowArrow())
+          : link(chapters[0].id, { class: "chapter-next__link" }, h("span", { class: "chapter-next__small" }, c.hidden ? "מוכנים להמשיך?" : "סיימתם"), h("span", { class: "chapter-next__title" }, c.hidden ? "חזרה למדריך" : "חזרה להתחלה"), flowArrow())
       )
     );
     chapterEls[c.id] = el;

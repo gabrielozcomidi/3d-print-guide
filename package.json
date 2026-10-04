@@ -9,7 +9,8 @@
     "build": "npm run validate && vite build",
     "preview": "vite preview",
     "validate": "node scripts/validate-data.js && node scripts/check-contrast.js",
-    "check:wizard": "node scripts/check-wizard.js"
+    "check:wizard": "node scripts/check-wizard.js",
+    "check:legal": "node scripts/check-legal.js"
   },
   "dependencies": {
     "@fontsource-variable/frank-ruhl-libre": "^5.3.0",

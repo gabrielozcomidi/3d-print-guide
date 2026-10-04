@@ -81,6 +81,10 @@ export const sections = [
     title: "מה כדאי לי להשתמש?",
     intro: "ארבע שאלות קצרות והמדריך יציע טכנולוגיה וחומר.",
   },
+  // legal pages: hidden chapters (see chapters.js), linked from the footer
+  { id: "accessibility", nav: "הצהרת נגישות", title: "הצהרת נגישות", intro: "" },
+  { id: "privacy", nav: "מדיניות פרטיות", title: "מדיניות פרטיות", intro: "" },
+  { id: "terms", nav: "תנאי שימוש", title: "תנאי שימוש", intro: "" },
 ];
 
 export const footerNote =

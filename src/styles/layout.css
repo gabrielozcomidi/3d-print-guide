@@ -109,10 +109,10 @@ html .rail-open-btn { display: none; }
 .toc__section[aria-current="true"] { color: var(--accent); text-decoration: underline wavy var(--accent) 2px; text-underline-offset: 0.25em; }
 
 /* ---------- Phone top bar and full-screen index ---------- */
-.site-nav { gap: var(--space-3); }
+.site-nav { gap: var(--space-1) var(--space-3); flex-wrap: wrap; padding-block: 0.25rem; } /* wraps when the visitor enlarges the text, so nothing runs off the screen */
 .site-nav__btn { padding: 0.5rem 0.95rem; font-size: 1rem; }
 .site-nav .logo { inline-size: 1.9rem; block-size: 1.9rem; }
-.site-nav__title { font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--accent); }
+.site-nav__title { flex: 1 1 8rem; min-inline-size: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; color: var(--accent); }
 
 .menu { padding-block: var(--space-3) var(--space-8); }
 .menu .menu__close { align-self: flex-start; margin-block-end: var(--space-3); }

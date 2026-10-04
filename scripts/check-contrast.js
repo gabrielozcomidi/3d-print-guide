@@ -54,6 +54,26 @@ const onAccent = ratio(token("--on-accent"), token("--accent"));
 console.log(`${onAccent >= 4.5 ? "ok  " : "FAIL"} ${"--on-accent".padEnd(16)} ${onAccent.toFixed(2)}:1 on accent (needs 4.5:1)`);
 if (onAccent < 4.5) bad++;
 
+// high-contrast mode (styles/a11y.css): the same pairs against its own black background
+const a11yCss = readFileSync(new URL("../src/styles/a11y.css", import.meta.url), "utf8");
+const hcBlock = a11yCss.match(/html\.a11y-contrast\s*\{([^}]*)\}/)?.[1] ?? "";
+const hc = (name) => hcBlock.match(new RegExp(`${name}\\s*:\\s*(#[0-9a-fA-F]{6})`))?.[1];
+const hcBg = hc("--bg");
+if (!hcBg) { console.error("FAIL high-contrast block not found in a11y.css"); bad++; }
+else {
+  const hcChecks = [["--text", 4.5], ["--text-dim", 4.5], ["--accent", 4.5], ["--border", 3], ["--t-fdm", 3], ["--t-sla", 3], ["--t-msla", 3], ["--t-sls", 3], ["--t-mjf", 3], ["--t-industrial", 3], ...Array.from({ length: 8 }, (_, i) => [`--m-${i + 1}`, 3])];
+  for (const [name, min] of hcChecks) {
+    const v = hc(name);
+    const r = v ? ratio(v, hcBg) : 0;
+    const ok = r >= min;
+    if (!ok) bad++;
+    console.log(`${ok ? "ok  " : "FAIL"} hc ${name.padEnd(13)} ${r.toFixed(2)}:1 on black (needs ${min}:1)`);
+  }
+  const hcOn = ratio(hc("--on-accent"), hc("--accent"));
+  console.log(`${hcOn >= 4.5 ? "ok  " : "FAIL"} hc --on-accent    ${hcOn.toFixed(2)}:1 on accent (needs 4.5:1)`);
+  if (hcOn < 4.5) bad++;
+}
+
 if (bad) {
   console.error(`\nContrast check failed (${bad}). Adjust the colour in src/styles/tokens.css.`);
   process.exit(1);

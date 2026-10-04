@@ -7,8 +7,8 @@
 
 /* density slider: a plain line with a round handle, in the site's ink */
 .density { margin-block-start: var(--space-2); }
-.density label { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-display); font-weight: 800; }
-.density input[type="range"] { flex: 1; accent-color: var(--accent); block-size: 1.5rem; cursor: pointer; }
+.density label { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-2); font-family: var(--font-display); font-weight: 800; }
+.density input[type="range"] { flex: 1 1 6rem; min-inline-size: 0; accent-color: var(--accent); block-size: 1.5rem; cursor: pointer; }
 .density input[type="range"]:disabled { opacity: 0.4; cursor: not-allowed; }
 .density input[type="range"]:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
 .density__value { min-inline-size: 3.2rem; text-align: end; color: var(--accent); }
