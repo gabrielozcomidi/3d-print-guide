@@ -1,0 +1,46 @@
+# Builds the site (npm run build -> dist/) and publishes it to GitHub Pages on every push to main.
+# One-time setting: repo Settings -> Pages -> Source = "GitHub Actions" (already set by the setup commands).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # also lets you run it by hand from the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # TEST MODE: plain build. BEFORE GOING PUBLIC use "npm run check:legal && npm run build" so the site cannot
+      # be published while the owner details in src/data/legal.js are missing.
+      - run: npm run build
+      # TEST MODE: keep search engines away from the test site. DELETE THIS STEP when you go public.
+      - run: sed -i 's|<head>|<head><meta name="robots" content="noindex, nofollow">|' dist/index.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
